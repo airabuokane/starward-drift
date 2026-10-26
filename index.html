@@ -525,8 +525,8 @@ const X=[["cb",!!s.cb,"戦闘中は、ダイスを選んで攻撃する。防御
 const f=X.find(x=>x[1]&&!s.tp[x[0]]);return f?`<div class="tip">ヒント:${f[2]}<div class="tools"><button class="sm" onclick="s.tp['${f[0]}']=1;draw()">わかった</button><button class="sm" onclick="s.tpoff=1;draw()">ヒントを消す</button></div></div>`:""}
 function init(){const ks=shuf(Object.keys(T).filter(k=>k!=="vector")).slice(0,7),i=ks.findIndex(k=>!["frontier","pirate","ruins","ice"].includes(k));[ks[0],ks[i]]=[ks[i],ks[0]];
 s={day:1,debt:3000,cred:40,fuel:6,hull:8,en:7,st:0,info:1,u:{},crew:[],n:0,pg:0,lim:lim(),scan:0,nz:Math.random(),loc:0,d:0,q:1,enc:0,mc:"f",tp:{},mods:[],eq:[],php:15,cp:0,inv:["w0"],fit:["w0"],imp:[],dn:0,stim:0,cb:null,
-cargo:Object.fromEntries(G.map(g=>[g[0],0])),cities:ks.map(mk),known:[1,0,0,0,0,0,0],dice:[],log:["回収船が、あなたを追っている。いつ来るかは分からない。","目を覚ます。船〈ヨスガ〉の中は静かだ。まずは下の「街」から外に出てみよう。"].reverse()};s.cargo.rt=5;s.v="ship";s.sv="stat";s.gf=null;s.ev=null;s.cities.forEach((c,i)=>{c.sn=c.ds.map((d,j)=>j===0||(i===0&&j===1));genMarket(c)});roll()}
-function roll(){const n=(s.en>=6?4:s.en<=2?2:3)+(hc("ai")?1:0);s.dice=Array.from({length:n},()=>({v:1+Math.floor(Math.random()*6),sd:0}));s.cd=Array.from({length:n+1},()=>({v:3+Math.floor(Math.random()*4),sd:0}));selc=null;
+cargo:Object.fromEntries(G.map(g=>[g[0],0])),cities:ks.map(mk),known:[1,0,0,0,0,0,0],dice:[],log:["回収船が、あなたを追っている。いつ来るかは分からない。","目を覚ます。船〈ヨスガ〉の中は静かだ。"].reverse()};s.cargo.rt=5;s.v="ship";s.sv="stat";s.gf=null;s.ev=null;s.cities.forEach((c,i)=>{c.sn=c.ds.map((d,j)=>j===0||(i===0&&j===1));genMarket(c)});roll()}
+function roll(){const n=(s.en>=6?4:s.en<=2?2:3)+(hc("ai")?1:0);s.dice=Array.from({length:n},()=>({v:1+Math.floor(Math.random()*6),sd:0}));s.cd=Array.from({length:4+(hc("ai")?1:0)},()=>({v:3+Math.floor(Math.random()*4),sd:0}));selc=null;
 if(M("luck"))s.dice[n-1].v=6;const k=s.st>=5?2:s.st>=3?1:0;for(let i=0;i<k&&i<n;i++){s.dice[i].v=1;s.dice[i].sd=1;s.cd[i].v=1;s.cd[i].sd=1}sel=null}
 function apply(e){if(e.i>0){const x=(pw("hkr")?1:0)+efv("info")+relB("info");if(x)e={...e,i:e.i+x}}s.hull=cl(s.hull+(e.h||0),hm());s.cred=Math.max(0,s.cred+(e.c||0));s.fuel=cl(s.fuel+(e.f||0),fcap());s.en=cl(s.en+(e.e||0),9);s.st=cl(s.st+(e.s||0),99);s.info+=e.i||0;s.php=cl(s.php+(e.hp||0),pmax());s.cp=cl(s.cp+(e.cp||0),10);s.pg=Math.max(0,s.pg+(e.p||0));if(e.z)s.scan=Math.max(s.scan,e.z);
 for(let j=0;j<(e.g||0);j++){const k=e.k;give(k?(k[0]==="@"?rnd(G.filter(x=>x[4]===k[1])):G.find(x=>x[0]===k)):rnd(G.filter(x=>x[4]!=="z")));if(Math.random()<.06)lootRoll()}
@@ -538,7 +538,7 @@ const E=(id,t)=>{const e={...A[id].t[t][1]};if(!s.tut&&e.c>0&&EARN.includes(id))
 function use(id){if(id==="recruit")return recruit();if(id==="final")return dgStart("dgv");if(DG[id])return dgStart(id);if(FCX[id])return FCX[id]();if(id==="quest")return questStart();if(A[id].nd)return useND(id);if(A[id].raid)return raidStart(id);if(A[id].cb)return mercStart(id);const a=A[id],c=a.cost?a.cost():0;if(!sd())return;
 if(s.cred<c){say("クレジットが足りない。");return draw()}if(a.fuel&&s.fuel<a.fuel){say("燃料が足りない。");return draw()}
 const i=pick(),d=s.dice[i],[v,b]=bv(id),t=jobTier(id,tier(cl6(v+vr()))),e=E(id,t);if(b>0)costComp(id);ct("use");s.rr={n:a.n,v:d.v,b,t,tl:a.tl};s.cred-=c;s.fuel-=a.fuel||0;s.dice.splice(i,1);sel=null;apply(e);say(`[${d.v}${b?"+"+b:""}] ${a.t[t][0]}。(${fmt(e)})`);check();if(a.fight&&t===0&&!s.end)return startCombat(a.fight,"mug");draw()}
-function recruit(){if(!sd())return;if(s.crew.length>=rooms()){say("客室が空いていない。工房で客室を増設しよう。");return draw()}
+function recruit(){if(!sd())return;if(s.crew.length>=rooms()){say("客室が空いていない。(工房で客室を増やせる)");return draw()}
 const left=Object.keys(CR).filter(k=>!s.crew.some(c=>c.k===k));if(!left.length){say("もう乗せられる仲間はいない。");return draw()}
 const i=pick(),d=s.dice[i],t=tier(cl6(d.v+vr()));s.rr={n:"仲間探し",v:d.v,t,tl:["誰も応じない","良い出会い","運命の出会い!"]};if(t===1&&s.cred<26){say("仲間を雇う26Crがない。");return draw()}
 s.dice.splice(i,1);sel=null;if(!t)say(`[${d.v}] 声をかけたが、誰も応じなかった。`);
@@ -566,11 +566,11 @@ function calm(){if(!sd()||!s.st)return;s.dice.splice(pick(),1);sel=null;s.st--;s
 const ammo=()=>Math.min(3,fc("a"))*2+Math.min(2,fc("gr"))*3,power=()=>4+L("gun")*6+(M("coil")?4:0)+(R("z3")?6:0)+(pw("gun")?2*pw("gun")+1:0)+(pw("merc")?2*pw("merc")+3:0);
 function fight(){if(s.tut===1){say("ミオ「無理よ! 迎撃砲がないわ。緊急ジャンプで逃げて!」");return draw()}const p=power(),e=8+7*s.n;s.enc=0;s.pg=0;s.lim=lim();
 if(p>=e){if(s.n>=2){s.end="gun";finish()}else{s.n++;say(`迎撃成功。(火力${p} ≥ 敵${e}) 回収船は後退した。だが、次はもっと大きい。`)}}
-else{s.hull-=3;s.cred=Math.floor(s.cred/2);say(`迎撃失敗。(火力${p} < 敵${e}) 船体-3、所持金は半分を押収された。`);check()}draw()}
+else{s.hull-=3;s.cred=Math.floor(s.cred/2);s.dn=(s.dn||0)+1;say(`迎撃失敗。(火力${p} < 敵${e}) 船体-3、所持金は半分を押収された。(敗北${s.dn}/3)`);if(s.dn>=3){s.end="dead";finish();return draw()}check()}draw()}
 function flee(){if(s.tut===1)return tutFlee();if(s.fuel<3)return;s.fuel-=3;s.hull=cl(s.hull-1,hm());s.enc=0;s.pg=0;s.lim=lim();const fr=s.loc;let to;if(s.tut){do{to=Math.floor(Math.random()*s.cities.length)}while(to===s.loc)}else{to=dgNewStar(fr)}
 if(!s.tut)dgRetire(fr,to);s.loc=to;s.known[to]=1;s.d=0;s.v="ship";s.sv="stat";say(`緊急ジャンプ。${s.cities[to].n}に転がり込んだ。(燃料-3 船体-1)`);check();draw()}
 const NIGHT=["雨がネオンを滲ませている。","遠くで警報が鳴り、すぐ止んだ。","通信が誰かの名前を呼んで途切れた。","船の外壁が、静かに冷えていく。"];
-function endDay(){s.rr={n:"日の終わり",stamp:"夜が明けた"};ct("endDay");const C=s.cities[s.loc];s.en--;s.day++;s.scan=0;s.nz=Math.random();let u="";
+function endDay(){s.rr={n:"日の終わり",stamp:"夜が明けた"};ct("endDay");const C=s.cities[s.loc];s.day++;s.scan=0;s.nz=Math.random();let u="";
 if(C.env>=2&&efv("env")<1){s.st++;u+=" 環境でストレス+1"}if(C.env>=3&&efv("env")<2){s.hull--;u+=" 船体-1"}
 const rp=(pw("eng")?Math.ceil(pw("eng")/2):0)+L("bay"),cal=(pw("doc")?Math.ceil(pw("doc")/2):0)+L("medbay")+(M("heart")?1:0)+(b5("ai")?1:0)+efv("calm");
 if(rp){s.hull+=rp;u+=` 整備で船体+${rp}`}if(cal){s.st-=cal;u+=` 休養でストレス-${cal}`}if(L("galley")||M("heart")){s.en+=(L("galley")?1:0)+(M("heart")?1:0);u+=" 体力回復"}
@@ -583,7 +583,7 @@ if(ldn()>=8&&Math.random()<.25){s.st=cl(s.st+2,99);s.php=Math.max(1,s.php-2);u+=
 if(C.sec===1&&Math.random()<.35*(1-mfMug())){if(pw("gua"))u+=" 用心棒が絡んできた連中を追い払った";else{const cv=cultEv();if(cv.msg)u+=cv.msg;ev=cv.ev||null}}
 else if(["corp","fortress"].includes(C.k)&&Math.random()<.2)ev=["guard","corp"];else if(["casino","pirate"].includes(C.k)&&Math.random()<.2)ev=["mafia","mafia"];
 s.hull=cl(s.hull,hm());s.st=cl(s.st,99);s.en=cl(s.en,9);
-let pa=Math.max(0,1+(Math.random()<.4?1:0)+(C.sec-2)-(R("z4")?1:0));if(pa>0&&b5("hkr")&&Math.random()<.25){pa=0;u+=" ノエが追跡を撹乱した(追手は進まず)"}s.pg+=pa+wlTick();say(`${s.day}日目の朝。${(s.tut===1&&!s.ship?CHASE[Math.min(Math.max(s.day-2,0),3)]:rnd(NIGHT))}(体力-1${u})`);check();if(s.end)return draw();
+let pa=Math.max(0,1+(Math.random()<.4?1:0)+(C.sec-2)-(R("z4")?1:0));if(pa>0&&b5("hkr")&&Math.random()<.25){pa=0;u+=" ノエが追跡を撹乱した(追手は進まず)"}s.pg+=pa+wlTick();say(`${s.day}日目の朝。${(s.tut===1&&!s.ship?CHASE[Math.min(Math.max(s.day-2,0),3)]:rnd(NIGHT))}${u?`(${u.trim()})`:""}`);check();if(s.end)return draw();
 roll();if(s.pg>=s.lim){if(M("gate")){s.eq=s.eq.filter(x=>x!=="gate");s.mods=s.mods.filter(x=>x!=="gate");s.pg=0;s.lim=lim();say("空間錨が作動し、回収船を振り切った。(空間錨は消滅)")}else{s.enc=1;say("警報。回収船が、すぐそこにいる。")}}if(ev)startCombat(ev[0],ev[1]);else draw()}
 function ending(k){s.end=k;finish();draw()}
 function radar(){if(!s.ship)return"謎の男達:"+(s.day<3?"遠い ▮▯▯":s.day<5?"近い ▮▮▯":"すぐ後ろ ▮▮▮");const r=s.pg/s.lim+(s.nz-.5)*.5,rem=s.lim-s.pg,sc=Math.max(s.scan,L("sensor")?1:0,pw("hkr")?1:0,M("lens")?2:0,R("z5")?2:0);
@@ -1131,7 +1131,7 @@ s_see:{x:"あなたは、男の袖口を指差した。「それ、外した跡�
 s_no:{x:"あなたは首を振った。男は舌打ちをして、闇に溶けた。",end:"neutral"}}}};
 function bmGen(C){if(C.bmDay===s.day&&C.bmV)return;C.bmDay=s.day;const n=Math.max(1,Math.min(9,Math.round((1+C.pros*1.1+Math.random()*2-.5)*1.5)));
 const vs=shuf(BMN).slice(0,n).map(nm=>{const m=1+Math.floor(Math.random()*3),w=[];for(let i=0;i<m;i++){let k;if(Math.random()<.07)k=rnd(G.filter(g=>g[4]==="z"&&!["z7","z8"].includes(g[0])))[0];else k=rnd(G.filter(g=>g[4]!=="z"))[0];
-const bs=G.find(g=>g[0]===k),z=bs[4]==="z",mult=z?.9+Math.random()*.9:.55+Math.random()*1.5;w.push({k,q:z?1:1+(Math.random()<.35?1:0)+(Math.random()<.1?1:0),p:Math.max(1,Math.round((C.pr[k]||bs[2])*mult))})}return{n:nm,say:rnd(BML),w}});
+const bs=G.find(g=>g[0]===k),z=bs[4]==="z",mult=z?.7+Math.random()*.5:(Math.random()<.15?1.05+Math.random()*.25:.55+Math.random()*.4);w.push({k,q:z?1:1+(Math.random()<.35?1:0)+(Math.random()<.1?1:0),p:Math.max(1,Math.round((C.pr[k]||bs[2])*mult))})}return{n:nm,say:rnd(BML),w}});
 const av=Object.keys(SQ).filter(id=>!SQ[id].rel&&!SQ[id].sf&&!sq().done.some(d=>d.id===id)&&!sq().act.some(a=>a.id===id));if(av.length&&Math.random()<.3){const id=rnd(av);vs.push({n:SQ[id].who,say:"……",q:id,w:[]})}C.bmV=vs}
 function bmUI(C){bmGen(C);return C.bmV.map((v,vi)=>`<div class="act"><b>${v.n}${v.q?` <small style="color:var(--a)">◆依頼あり</small>`:""}</b><span>${v.q?SQ[v.q].hook.slice(0,34)+"…":v.say}</span>${v.q?`<button class="sm" style="margin-top:6px;width:100%" onclick="sqOffer('${v.q}',${vi})">話を聞く</button>`:`<div class="acts" style="gap:4px;margin-top:6px">${v.w.map((w,wi)=>`<div class="mk"><div>${icG(w.k)}${MAT.includes(bk(w.k))?"★":""}${GN[w.k]}<span>${w.q}個 ・ ${w.p}Cr/個 ・ 相場${C.pr[w.k]}</span></div><button onclick="bmBuy(${vi},${wi})">買 ${w.p}</button></div>`).join("")||"<span>……売り切れだ。</span>"}</div>`}</div>`).join("")}
 function bmBuy(vi,wi){const C=s.cities[s.loc],v=C.bmV[vi],w=v&&v.w[wi];if(!w)return;s.pp=1;s.rr={n:"闇市",stamp:"購入"};if(s.cred<w.p){say("クレジットが足りない。");return draw()}if(tot()>=cap()){say("貨物枠がいっぱい。");return draw()}
@@ -1810,10 +1810,10 @@ function relUI(C,dk){const D=RELD[dk],S=rgS(),mine=S.r===dk;if(!mine&&S.r){const
 const rk=S.rk,need=RGN[rk],rq=relRq(C,dk),qid=`r_${RGK[dk]}${rk+1}`;let h=`<div class="act"><b>${D.n} ・ ${D.ranks[rk-1]}(位${rk}/5)</b><span>${rk<5?`信頼 ${S.tp}/${need}`:`信頼 ${S.tp}(最高位)`}<br>${D.perk.slice(0,rk).map((p,i)=>`位${i+1}: ${p}`).join("<br>")}</span></div>`;
 h+=`<button class="act" ${pryLeft(S)<=0?"disabled":""} onclick="relPray()"><b>お祈りをする</b><span>${pryUnl(S)?"何度でも ・ ストレスが和らぐ":pryLeft(S)<=0?"今日はもう祈った":`1日${pryCap(S)}回(あと${pryLeft(S)}回) ・ ストレスが和らぐ`}</span></button>`;
 if(rk<5&&S.tp>=need){const a=sq().act.find(x=>x.id===qid);h+=`<button class="act win" onclick="relQuest()"><b>${a?"試練を続ける":"位を上げる試練"}:『${SQ[qid].t}』</b><span>信頼が十分に集まった</span></button>`}
-h+=`<div class="lbl">教団の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="relReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:"ダイス1個 ・ 出目が良いほど信頼と報酬が増える"}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
+h+=`<div class="lbl">教団の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="relReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:`ダイス1個 ・ 重さ${"★".repeat(r.w||1)} ・ 信頼 成功+${r.w||1}/大成功+${2*(r.w||1)}${(r.w||1)>1?` ・ 報酬${r.w}倍`:""}`}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
 h+=`<div class="lbl">お布施</div><div class="tools">${[[10,1],[50,6],[100,14]].map(([c,t])=>`<button class="sm" ${s.cred>=c?"":"disabled"} onclick="relDon(${c},${t})">${c}Cr</button>`).join("")}</div>`;
-const gl=G.filter(g=>(s.cargo[g[0]]||0)>0&&!["z7","z8"].includes(g[0]));
-h+=`<div class="lbl">納品</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${s.cargo[g[0]]} ・ 1個で信頼${Math.min(6,Math.max(1,Math.round(g[2]/20)))}</span></div><button onclick="relGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
+const gl=dvList(C);
+h+=`<div class="lbl">納品(今日の品 ・ 毎日入れ替わる)</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${dvHeld(g[0])} ・ 1個で信頼${dvTp(g)}${dvDone(C,g[0])?" ・ 今日は納品済み":""}</span></div><button ${dvHeld(g[0])>0&&!dvDone(C,g[0])?"":"disabled"} onclick="relGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
 if(dk==="lamp"&&rk>=3)h+=`<button class="act" ${s.cred>=relFC()&&s.fuel<fcap()?"":"disabled"} onclick="relFuel()"><b>灯を分けてもらう</b><span>${relFC()}Cr ・ 燃料+1</span></button>`;
 if(dk==="tally"&&rk>=2){const f=rk>=5?.9:.6;h+=`<div class="lbl">帳場(所持金の上限なし ・ 相場の${Math.round(f*100)}%)</div>`+(gl.length?gl.map(g=>{const p=Math.round((C.pr[g[0]]||g[2])*f);return`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${s.cargo[g[0]]} ・ 1個 ${p}Cr</span></div><button onclick="relSell('${g[0]}',1)">売 ${p}</button>${s.cargo[g[0]]>1?`<button onclick="relSell('${g[0]}',${s.cargo[g[0]]})">全部</button>`:""}</div>`}).join(""):'<div class="none">売れる荷物がない。</div>')}
 const bs=[D.bk[0],D.bk[1]].concat(rk>=3?[D.b3]:[],rk>=4?[D.b4]:[]).filter((x,i,a)=>a.indexOf(x)===i);
@@ -1830,9 +1830,9 @@ function relReq(i){const S=rgS(),C=s.cities[s.loc],dk=S.r,l=relRq(C,dk),r=l[i];i
 if(r.t==="del"){if(catN(r.c)<r.n){say("荷物が足りない。");return draw()}takeCat(r.c,r.n);const t=relTp(r.tp);s.cred+=r.cr;l.splice(i,1);s.rr={n:RELD[dk].n,stamp:"依頼達成"};say(`${CAT[r.c]}を納めた。(Cr+${r.cr} 信頼+${t})`);return draw()}
 if(!sd())return;const j=pick(),d=s.dice[j],t=tier(cl6(d.v+vr()));s.dice.splice(j,1);sel=null;s.rr={n:RELD[dk].n,v:d.v,t,tl:["うまくいかなかった…","手伝えた","よく働いた!"]};
 if(t===0){say(`[${d.v}] 手間取って、役に立てなかった。(依頼は残っている)`);return draw()}
-const tp=relTp(t===2?2:1),cr=t===2?10:4;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
+const w_=r.w||1,tp=relTp((t===2?2:1)*w_),cr=(t===2?10:4)*w_;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
 function relDon(c,t){const S=rgS();if(s.cred<c)return draw();s.cred-=c;const g=relTp(t);s.rr={n:"お布施",stamp:"お布施を納めた"};say(`${c}Crをお布施した。(信頼+${g})`);draw()}
-function relGive(k){if((s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=relTp(Math.min(6,Math.max(1,Math.round(g[2]/20))));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
+function relGive(k){if((s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=relTp(dvTp(g));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
 function relFuel(){const c=relFC();if(s.cred<c||s.fuel>=fcap())return draw();s.cred-=c;s.fuel++;s.rr={n:"灯の分け前",stamp:"補給完了"};say(`灯の油を、少し分けてもらった。(Cr-${c} 燃料+1)`);draw()}
 function relSell(k,n){const S=rgS(),C=s.cities[s.loc];n=Math.min(n,s.cargo[k]||0);if(n<=0)return draw();const f=S.rk>=5?.9:.6,p=Math.round((C.pr[k]||1)*f)*n;s.cargo[k]-=n;s.cred+=p;ct("sell");s.rr={n:"帳場",stamp:"買取成立"};say(`${GN[k]}を${n}個、帳場に売った。(+${p}Cr)`);draw()}
 function relBook(id){const b=BOOKS[id];if(s.cred<b.p||lib().some(x=>x.id===id))return draw();s.cred-=b.p;addBook(id);s.rr={n:"書棚",stamp:"蔵書に追加"};say(`${b.t}を買った。(Cr-${b.p})`);draw()}
@@ -2031,7 +2031,7 @@ const tutSetup_0=tutSetup;tutSetup=function(){tutSetup_0();dgPlace()};
 const dgItem=D=>{const z=G.filter(g=>g[4]==="z"&&!["z7","z8"].includes(g[0])),zc=D.zc!=null?D.zc:.05+.03*D.d;if(Math.random()<zc)return rnd(z)[0];const pool=G.filter(g=>g[4]!=="z").sort((a,b)=>a[2]-b[2]);return pool[Math.floor(Math.pow(Math.random(),Math.max(.55,1.5-.2*D.d))*pool.length)][0]};
 function dgGet(k,q){const g=s.dg;let lost=0;for(let i=0;i<q;i++){if(tot()<cap()){s.cargo[k]=(s.cargo[k]||0)+1;if(g)g.gain.it[k]=(g.gain.it[k]||0)+1}else lost++}return`${GN[k]}×${q-lost}${lost?`(荷物がいっぱいで${lost}個を置いてきた)`:""}`}
 function dgCr(n){s.cred+=n;if(s.dg)s.dg.gain.cr+=n}
-function dgW(W,t){const e=W.ev||0;return t==="bt"?W.bt*.85:t==="no"?W.no+e*.6:(t==="tp"||t==="dr")?W[t]+e*.2:W[t]}
+function dgW(W,t){const e=W.ev||0;return t==="bt"?W.bt*.85:t==="tr"?W.tr*1.7:t==="no"?W.no+e*.6:(t==="tp"||t==="dr")?W[t]+e*.2:W[t]}
 function dgNoX(){const r=Math.random();if(r<.25){const h=Math.max(2,Math.round(pmax()*.35));s.php=Math.min(pmax(),s.php+h);dgNext(`古い補給箱の中に、使える薬が残っていた。(HP+${h})`);return true}if(r<.4){s.info++;dgNext("壁に残された記録を、読み取った。(情報+1)");return true}return false}
 function dgRoll(D,f){const W=D.w,first=f===0,last=f===D.fl-1;const pool=Object.keys(W).filter(t=>t!=="ev"&&!(first&&t==="dr")).map(t=>[t,dgW(W,t)]);const n=3,o=[];if(last)o.push("dr");
  let g=0;while(o.length<n&&g++<60){let r=Math.random()*pool.reduce((a,x)=>a+x[1],0),t=null;for(const[x,w]of pool){r-=w;if(r<=0){t=x;break}}if(t&&(!o.includes(t)||Math.random()<.1))o.push(t)}
@@ -2049,7 +2049,7 @@ function dgStart(id){if(s.cb||s.ev)return;const D=DG[id];if(!D)return;dgDays();
   if(s.dgc[id]){say(`「${D.n}」は、すでに踏破した。`);return draw()}if(s.dgd[id]===s.day){say("今日は、もう挑んだ。明日、また来よう。");return draw()}s.dgd[id]=s.day}
  s.dg={id,f:0,gain:{cr:0,it:{}},ch:null};say(`<b>「${D.n}」に踏み込んだ。</b>`);dgFloor(D.intro)}
 function dgNext(tx){const g=s.dg;if(!g)return draw();g.f++;g.ch=null;dgFloor(tx)}
-function dgDice(){const n=(s.en>=6?4:s.en<=2?2:3)+(hc("ai")?1:0);s.cd=Array.from({length:n+1},()=>({v:3+Math.floor(Math.random()*4),sd:0}));const k=s.st>=5?2:s.st>=3?1:0;for(let i=0;i<k&&i<s.cd.length;i++){s.cd[i].v=1;s.cd[i].sd=1}}
+function dgDice(){const n=(s.en>=6?4:s.en<=2?2:3)+(hc("ai")?1:0);s.cd=Array.from({length:4+(hc("ai")?1:0)},()=>({v:3+Math.floor(Math.random()*4),sd:0}));const k=s.st>=5?2:s.st>=3?1:0;for(let i=0;i<k&&i<s.cd.length;i++){s.cd[i].v=1;s.cd[i].sd=1}}
 function dgTreasure(D,small){const m=small?.5:1,cr=Math.round((8+11*D.d)*(.7+Math.random()*.6)*D.tm*m);let tx=rnd(D.tx)+"、";dgCr(cr);const q=Math.random()<.35?2:1;if(!small||Math.random()<.6){const k=dgItem(D);tx+=`${dgGet(k,small?1:q)}とCr+${cr}を見つけた。`}else tx+=`Cr+${cr}を見つけた。`;return tx}
 function dgDmg(D,mul){const d=Math.max(0,Math.min(s.php-1,Math.round((1+D.d*1.1+Math.random()*2)*mul)));s.php-=d;return d}
 function dgNode(n){const g=s.dg,D=DG[g.id];s.ev=null;s.pp=0;
@@ -2134,9 +2134,9 @@ fcReg("gamble","gbplay","賭場で遊ぶ",()=>"丁半・ハイ&ロー・スロ�
 /* --- ターミナル: 航路予報 --- */
 fcReg("hub","hubr","航路予報を買う 23Cr",()=>"行き先の候補を引き直す。",()=>{if(s.tut||s.vec){say("今は、使えない。");return draw()}if(s.cred<23){say("クレジットが足りない。");return draw()}s.cred-=23;const c=s.cities[s.loc];(c.nx||[]).forEach(j=>{const x=s.cities[j];if(x&&!x.vis){x.dead=1;x.off=0}});c.nx=null;mapAdj(s.loc);s.pp=1;s.rr={n:"航路予報",stamp:"行き先を更新",t:2};say("航路予報を買った。行き先の星が、新しく引き直された。(-23Cr)");draw()});
 /* --- 商業環: 福引 --- */
-fcReg("mall","mallk","福引を引く 26Cr",()=>"ガラガラを回す。特賞は、稀少品。",()=>{if(s.cred<26){say("クレジットが足りない。");return draw()}if(tot()>=cap()){say("荷物がいっぱいで、景品を受け取れない。");return draw()}s.cred-=26;const r=Math.random(),pool=G.filter(g=>g[4]!=="z");let t,k;s.pp=1;
- if(r<.02){k=rnd(G.filter(g=>g[4]==="z"&&!["z7","z8"].includes(g[0])))[0];t="<b>特賞!</b>";s.rr={n:"福引",stamp:"特賞!",t:2}}else if(r<.12){k=rnd(pool.filter(g=>g[2]>=50))[0];t="<b>二等!</b>";s.rr={n:"福引",stamp:"二等!",t:2}}else if(r<.45){k=rnd(pool.filter(g=>g[2]<50))[0];t="三等。";s.rr={n:"福引",stamp:"三等",t:1}}else{s.cred+=6;say("福引を引いた。参加賞のクーポンだった。(-26Cr +6Cr)");s.rr={n:"福引",stamp:"参加賞",t:0};return draw()}
- s.cargo[k]++;say(`福引を引いた。${t}${GN[k]}を手に入れた。(-26Cr)`);draw()});
+fcReg("mall","mallk","福引を引く",()=>`福引券1枚で1回(所持${s.fkT||0}枚) ・ 特賞は、稀少品。`,()=>{if(!(s.fkT>0)){say("福引券がない。");return draw()}if(tot()>=cap()){say("荷物がいっぱいで、景品を受け取れない。");return draw()}s.fkT--;const r=Math.random(),pool=G.filter(g=>g[4]!=="z");let t,k;s.pp=1;
+ if(r<.02){k=rnd(G.filter(g=>g[4]==="z"&&!["z7","z8"].includes(g[0])))[0];t="<b>特賞!</b>";s.rr={n:"福引",stamp:"特賞!",t:2}}else if(r<.12){k=rnd(pool.filter(g=>g[2]>=50))[0];t="<b>二等!</b>";s.rr={n:"福引",stamp:"二等!",t:2}}else if(r<.45){k=rnd(pool.filter(g=>g[2]<50))[0];t="三等。";s.rr={n:"福引",stamp:"三等",t:1}}else{s.cred+=6;say("福引を引いた。参加賞のクーポンだった。(福引券-1 +6Cr)");s.rr={n:"福引",stamp:"参加賞",t:0};return draw()}
+ s.cargo[k]++;say(`福引を引いた。${t}${GN[k]}を手に入れた。(福引券-1)`);draw()});
 /* --- リゾート: 休養メニュー --- */
 fcReg("beach","beachm","高級マッサージ 33Cr",()=>"ストレス-3、体力+1。",()=>{if(s.cred<33){say("クレジットが足りない。");return draw()}s.cred-=33;apply({s:-3,e:1});s.pp=1;s.rr={n:"マッサージ",stamp:"ほぐれた",t:2};say("プロの手で、凝りがほぐれた。(-33Cr ストレス-3 体力+1)");draw()});
 fcReg("beach","beachp","ビーチパーティー 40Cr",()=>"ストレス-2。仲間全員の機嫌+1。",()=>{if(s.cred<40){say("クレジットが足りない。");return draw()}s.cred-=40;apply({s:-2});(s.crew||[]).forEach(c=>{c.mood=Math.min(3,c.mood+1)});s.pp=1;s.rr={n:"パーティー",stamp:"大盛り上がり",t:2};say(`夜の浜辺で、騒いだ。${s.crew&&s.crew.length?"仲間の機嫌が上がった。":""}(-40Cr ストレス-2)`);draw()});
@@ -2421,12 +2421,12 @@ function rsUI(C){const S=rsS();
  const rk=S.rk,need=RGN[rk],rq=rsRq(C),qid=`r_R${rk+1}`;
  let h=`<div class="act"><b>${RSN} ・ ${RSR[rk-1]}(位${rk}/5)</b><span>${rk<5?`信頼 ${S.tp}/${need}`:`信頼 ${S.tp}(最高位)`}<br>${RSD.perk.slice(0,rk).map((p,i)=>`位${i+1}: ${p}`).join("<br>")}</span></div>`;
  h+=`<div class="lbl">訓練</div><button class="act" ${S.td===s.day||!sd()||s.cred<23?"disabled":""} onclick="rsTrain()"><b>訓練をする</b><span>${S.td===s.day?"今日はもう訓練した":"ダイス1個 ・ 23Cr ・ 1日1回 ・ 新しい戦線スキルを習得(出目が高いと強力なものが出やすい)"}</span></button>`;
- h+=`<div class="lbl">戦線スキル(ダンジョンの中でのみ発動 ・ 装備枠 ${S.eq.length}/${rsSlots()})</div>`+(S.sk.length?S.sk.map(k=>{const on=S.eq.includes(k);return`<button class="act ${on?"win":""}" onclick="rsEq('${k}')"><b>${on?"◆ ":""}${RSK[k].n}</b><span>${RSK[k].d} ・ ${on?"装備中(タップで外す)":"タップで装備"}</span></button>`}).join(""):'<div class="none">まだスキルを習得していない。訓練をしよう。</div>');
+ h+=`<div class="lbl">戦線スキル(ダンジョンの中でのみ発動 ・ 装備枠 ${S.eq.length}/${rsSlots()})</div>`+(S.sk.length?S.sk.map(k=>{const on=S.eq.includes(k);return`<button class="act ${on?"win":""}" onclick="rsEq('${k}')"><b>${on?"◆ ":""}${RSK[k].n}</b><span>${RSK[k].d} ・ ${on?"装備中(タップで外す)":"タップで装備"}</span></button>`}).join(""):'<div class="none">まだスキルを習得していない。(訓練で習得できる)</div>');
  if(rk<5&&S.tp>=need){const a=sq().act.find(x=>x.id===qid);h+=`<button class="act win" onclick="rsQuest()"><b>${a?"昇格任務を続ける":"昇格任務"}:『${SQ[qid].t}』</b><span>信頼が十分に集まった</span></button>`}
- h+=`<div class="lbl">戦線の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="rsReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`物資の提供:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:"ダイス1個 ・ 出目が良いほど信頼と報酬が増える"}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
+ h+=`<div class="lbl">戦線の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="rsReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`物資の提供:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:`ダイス1個 ・ 重さ${"★".repeat(r.w||1)} ・ 信頼 成功+${r.w||1}/大成功+${2*(r.w||1)}${(r.w||1)>1?` ・ 報酬${r.w}倍`:""}`}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
  h+=`<div class="lbl">資金援助</div><div class="tools">${[[10,1],[50,6],[100,14]].map(([c,t])=>`<button class="sm" ${s.cred>=c?"":"disabled"} onclick="rsDon(${c},${t})">${c}Cr</button>`).join("")}</div>`;
- const gl=G.filter(g=>(s.cargo[g[0]]||0)>0&&!["z7","z8"].includes(g[0]));
- h+=`<div class="lbl">物資の提供</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${s.cargo[g[0]]} ・ 1個で信頼${Math.min(6,Math.max(1,Math.round(g[2]/20)))}</span></div><button onclick="rsGive('${g[0]}')">提供する</button></div>`).join(""):'<div class="none">提供できる荷物がない。</div>');
+ const gl=dvList(C);
+ h+=`<div class="lbl">物資の提供(今日の品 ・ 毎日入れ替わる)</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${dvHeld(g[0])} ・ 1個で信頼${dvTp(g)}${dvDone(C,g[0])?" ・ 今日は納品済み":""}</span></div><button ${dvHeld(g[0])>0&&!dvDone(C,g[0])?"":"disabled"} onclick="rsGive('${g[0]}')">提供する</button></div>`).join(""):'<div class="none">提供できる荷物がない。</div>');
  const bs=[RSD.bk[0],RSD.bk[1]].concat(rk>=3?[RSD.b3]:[],rk>=4?[RSD.b4]:[],rk>=5?[RSD.b5]:[]);
  h+=`<div class="lbl">書棚</div>`+bs.map(id=>{const b=BOOKS[id];return lib().some(x=>x.id===id)?`<div class="act"><b>${b.t}</b><span>所蔵済み</span></div>`:`<button class="act" ${s.cred>=b.p?"":"disabled"} onclick="relBook('${id}')"><b>${b.t}</b><span>${b.g} ・ ${b.p}Cr</span></button>`}).join("");
  h+=S.lvc?`<button class="act bad" onclick="rsLeave(1)"><b>本当に脱退する</b><span>位・信頼・スキルがすべて消える</span></button>`:`<button class="sm" onclick="rsLeave(0)">戦線を抜ける</button>`;return h}
@@ -2445,9 +2445,9 @@ function rsReq(i){const S=rsS(),C=s.cities[s.loc],l=rsRq(C),r=l[i];if(!r)return 
  if(r.t==="del"){if(catN(r.c)<r.n){say("荷物が足りない。");return draw()}takeCat(r.c,r.n);const t=rsTp(r.tp);s.cred+=r.cr;l.splice(i,1);s.rr={n:RSN,stamp:"依頼達成"};say(`${CAT[r.c]}を提供した。(Cr+${r.cr} 信頼+${t})`);return draw()}
  if(!sd())return;const j=pick(),d=s.dice[j],t=tier(cl6(d.v+vr()));s.dice.splice(j,1);sel=null;s.rr={n:RSN,v:d.v,t,tl:["うまくいかなかった…","手伝えた","よく働いた!"]};
  if(t===0){say(`[${d.v}] 手間取って、役に立てなかった。(依頼は残っている)`);return draw()}
- const tp=rsTp(t===2?2:1),cr=t===2?10:4;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
+ const w_=r.w||1,tp=rsTp((t===2?2:1)*w_),cr=(t===2?10:4)*w_;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
 function rsDon(c,t){if(s.cred<c)return draw();s.cred-=c;const g=rsTp(t);s.rr={n:"資金援助",stamp:"援助した"};say(`${c}Crを戦線に援助した。(信頼+${g})`);draw()}
-function rsGive(k){if((s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=rsTp(Math.min(6,Math.max(1,Math.round(g[2]/20))));s.rr={n:"物資の提供",stamp:"提供完了"};say(`${g[1]}を戦線に提供した。(信頼+${t})`);draw()}
+function rsGive(k){if((s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=rsTp(dvTp(g));s.rr={n:"物資の提供",stamp:"提供完了"};say(`${g[1]}を戦線に提供した。(信頼+${t})`);draw()}
 function rsQuest(){const S=rsS();if(!S.rk||S.rk>=5||S.tp<RGN[S.rk])return draw();const qid=`r_R${S.rk+1}`,a=sq().act.find(x=>x.id===qid);s.pp=0;if(a)return sqGo(qid,a.st,1);sq().act.push({id:qid,st:"s0"});say(`<b>昇格任務を受けた:『${SQ[qid].t}』</b>`);sqGo(qid,"s0",1)}
 function rsEnd(qid,r){const S=rsS();if(r!=="win"||!S.rk)return;if(S.rk<5){S.tp=Math.max(0,S.tp-RGN[S.rk]);S.rk++;say(`<b>${RSN}での位が上がった:${RSR[S.rk-1]}(位${S.rk})</b> ${RSD.perk[S.rk-1]}`)}sq().done.push({id:qid,r})}
 const relEnd_rs=relEnd;relEnd=function(qid,r){if(/^r_R/.test(qid))return rsEnd(qid,r);return relEnd_rs.apply(this,arguments)};
@@ -2595,7 +2595,7 @@ function introOnce(k){if(!s||s.tut||MAN[k]||(s.gq||[]).some(g=>g.m===k))return;c
  // 2枚目以降も手引書に載せる
  const all=I[1].join("<br><br>");MAN[k]=[I[0],all];try{localStorage.setItem("sv-man",JSON.stringify(MAN))}catch(e){}}
 const dgStart_in=dgStart;dgStart=function(id){if(s&&!s.cb&&!s.ev&&DG[id])introOnce("dg");return dgStart_in.apply(this,arguments)};
-const enter_in=enter;enter=function(i){const C=s.cities[s.loc],id=C&&C.ds[i];const r=enter_in.apply(this,arguments);try{if(s.v==="place"){if(id==="lamp"||id==="tally")introOnce("rel");else if(id==="resist")introOnce("res")}}catch(e){}return r};
+const enter_in=enter;enter=function(i){const C=s.cities[s.loc],id=C&&C.ds[i];const r=enter_in.apply(this,arguments);try{if(s.v==="place"){if(id==="lamp"||id==="tally")introOnce("rel");else if(id==="resist")rsIntro()}}catch(e){}return r};
 /* ===== エンディング追加メッセージ ===== */
 const ENX={
 resG:[[1,2,"黎明戦線の仲間たちは、遠い港で、あなたの報せを受け取った。「あいつ、やりやがった」と、誰かが笑った。"],[3,4,"黎明戦線の通信網に、あなたの名前が流れた。ナツメ「あなたの席は、いつでも空けておくわ」"],[5,5,"総司令の旗が、拠点の壁に掲げられた。ナツメ「夜明けは、配られない。……奪い返したわね、総司令」"]],
@@ -2628,27 +2628,27 @@ const dpS=()=>s.dp||(s.dp={st:0,g:0});
 const stab=()=>L("stab")+(pw("nav")>=3?2:pw("nav")?1:0),spd=()=>L("spd"),spdFix=t=>t===0&&Math.random()<spd()*.2?1:t;
 const dpNeed=()=>s.tut?2:Math.max(2,5-stab());
 function dpStart(){const d=dpS();if(d.st!==0||s.cb||s.ev)return draw();d.st=1;d.g=dpNeed();s.pp=0;say(`<b>船を出航準備の状態にした。</b>準備値${d.g}。夜を越すたびに、準備が進む。`);draw()}
-function dpRoll(){const d=dpS();if(d.st!==1||!sd()||s.cb||s.ev)return draw();const j=pick(),dv=s.dice[j],t=tier(cl6(dv.v+vr())),dc=t===2?2:t===1?1:0,o=d.g;s.dice.splice(j,1);sel=null;d.g=Math.max(0,d.g-dc);
+function dpRoll(){const d=dpS();if(d.st!==1||!sd()||s.cb||s.ev)return draw();const j=pick(),dv=s.dice[j],t=tier(cl6(dv.v+1+vr())),dc=t===2?2:t===1?1:0,o=d.g;s.dice.splice(j,1);sel=null;d.g=Math.max(0,d.g-dc);
  s.pp=1;s.rr={n:"出航準備",v:dv.v,t,tl:["はかどらない…","準備が進んだ","大きく進んだ!"]};
  say(`[${dv.v}] ${t===2?"出航準備が大きく進んだ!":t===1?"出航準備が進んだ。":"手間取って、準備は進まなかった。"}(準備 ${o}→${d.g})`);
- if(d.g<=0){d.st=2;say("<b>出航待機状態になった。今日のうちに出航しよう。</b>")}draw()}
+ if(d.g<=0){d.st=2;say("<b>出航待機状態になった。(今日のうちなら出航できる)</b>")}draw()}
 function dpCancel(){const d=dpS();d.st=0;d.g=0;say("出航準備をやめた。");draw()}
 function dpEmer(){if(s.fuel<3||s.cb||s.ev||tutLock())return draw();flee()}
 function dpUI(){if(!s.ship||s.vec)return"";const d=dpS(),need=dpNeed();let h=`<div class="lbl">出航</div>`;
  if(d.st===0)h+=`<div class="act"><b>船は停泊中</b><span>出航には「出航準備」が必要です。準備値${need}を0まで減らすと出航できます。</span></div><button class="act go" data-t="dep-start" onclick="dpStart()"><b>出航準備に入る</b><span>費用なし ・ ダイスを使うか、夜を越すと準備が進む</span></button>`;
- else if(d.st===1)h+=`<div class="act win"><b>出航準備中 ${d.g}/${need}</b><span>ダイスで準備値が減る(大成功-2 ・ 成功-1 ・ 失敗±0)。夜を越すと-1。0になると出航待機。</span></div><button class="act go" ${sd()?"":"disabled"} data-t="dep-roll" onclick="dpRoll()"><b>ダイスで準備を進める</b><span>ダイス1個を選んで押す ・ 何度でも可</span></button><button class="sm" onclick="dpCancel()">準備をやめる</button>`;
+ else if(d.st===1)h+=`<div class="act win"><b>出航準備中 ${d.g}/${need}</b><span>ダイスで準備値が減る(大成功-2 ・ 成功-1 ・ 失敗±0)。夜を越すと-1。0になると出航待機。</span></div><button class="act go" ${sd()?"":"disabled"} data-t="dep-roll" onclick="dpRoll()"><b>ダイスで準備を進める</b><span>ダイス1個を選んで押す ・ 何度でも可</span></button>`;
  else h+=`<div class="act win"><b>◆ 出航待機中</b><span>今すぐ出航できます。夜を越すと待機は解除されます。</span></div>`;
  if(!tutLock())h+=`<button class="act bad" ${s.fuel>=3?"":"disabled"} onclick="dpEmer()"><b>緊急出航</b><span>準備なしで飛ぶ ・ 燃料3・船体-1 ・ 行き先はランダム ・ 追手を振り切る</span></button>`;
  return h}
 const routeUI_dp=routeUI;routeUI=function(){return dpUI()+routeUI_dp.apply(this,arguments)};
-const jump_dp=jump;jump=function(to){if(!s.ship||dpS().st!==2){if(s.ship){say("出航準備が整っていない。航路画面で、出航準備に入ろう。");draw()}return}const fr=s.loc;jump_dp.apply(this,arguments);if(s.loc!==fr){const d=dpS();d.st=0;d.g=0}};
+const jump_dp=jump;jump=function(to){if(!s.ship||dpS().st!==2){if(s.ship){say("出航準備が整っていない。(航路で出航準備に入れる)");draw()}return}const fr=s.loc;jump_dp.apply(this,arguments);if(s.loc!==fr){const d=dpS();d.st=0;d.g=0}};
 const flee_dp=flee;flee=function(){const fr=s.loc;flee_dp.apply(this,arguments);if(s.loc!==fr&&s.dp){s.dp.st=0;s.dp.g=0}};
 const endDay_dp=endDay;endDay=function(){
  if(s&&!s.end&&s.ship){const d=dpS();
   if(d.st===2&&!s.dpok&&!s.cb&&!s.ev){s.fc={m:"dpc"};return fcEv("出航待機中","READY","出航待機の状態だ。眠って1日が経つと、待機は解除されて通常状態に戻る。それでも眠るか?",[{id:"y",l:"それでも眠る",c:"bad",s:"出航待機が解除される"},{id:"x",l:"やめる",c:"go",s:"出航を優先する"}])}
   s.dpok=0;
   if(d.st===1){const o=d.g;d.g=Math.max(0,d.g-1);say(`夜を越して、出航準備が進んだ。(準備 ${o}→${d.g})`);
-   if(d.g<=0){d.st=2;say("<b>出航待機状態になった。今日のうちに出航しよう。</b>")}}
+   if(d.g<=0){d.st=2;say("<b>出航待機状態になった。(今日のうちなら出航できる)</b>")}}
   else if(d.st===2){d.st=0;d.g=0;say("出航待機が解除された。")}}
  return endDay_dp.apply(this,arguments)};
 FCH.dpc=function(a){if(a==="y"){s.ev=null;s.fc=null;s.pp=0;s.dpok=1;return endDay()}s.ev=null;s.fc=null;draw()};
@@ -2762,7 +2762,7 @@ DN.race[4][2]="「大勝ちした客は、署の連中に覚えられる。…�
 const WLR=["「襲撃だの略奪だの、派手にやる奴ほど、警官の帳簿は分厚くなる。治安のいい星は、特にな」","「警官は賭場の用心棒みたいなもんさ。客が勝ちすぎると、胴元が警官に耳打ちする」","「騒ぎを起こさずにいれば、警官の目も、そのうち逸れる。星を移れば、なおさらだ」","「目をつけられると、追手も嗅ぎつけやすくなる。……警官と追手は、案外、仲がいい」"];
 const rumor_wl=rumor;rumor=function(){if(Math.random()<.3){say(`<b>${rnd(["露天商","船乗り","酒場の客","年老いた整備士","屋台の店主"])}から、噂を聞いた。</b>${rnd(WLR)}`);return}return rumor_wl.apply(this,arguments)};
 /* ===== 星系の外への出航も準備が必要 / 話術パネル / 効果音 ===== */
-const leave_dp=leave;leave=function(){if(s.ship&&!s.vec&&dpS().st!==2){say("出航準備が整っていない。航路画面で、出航準備に入ろう。");return draw()}const e0=s.end;leave_dp.apply(this,arguments);if(s.end!==e0||s.vec){const d=dpS();d.st=0;d.g=0}};
+const leave_dp=leave;leave=function(){if(s.ship&&!s.vec&&dpS().st!==2){say("出航準備が整っていない。(航路で出航準備に入れる)");return draw()}const e0=s.end;leave_dp.apply(this,arguments);if(s.end!==e0||s.vec){const d=dpS();d.st=0;d.g=0}};
 function talkB(){const t=pw("trd"),n=pw("hkr")?1:0,c=fx("trade")?1:0;return{t,tv:t*2,n,c,b:t*2+c+n+sat("tk")}}
 function talkPanel(){const x=talkB(),pc=v=>{let k=0;for(const r of[-2,-1,0,1,2])if(v+x.b+r>=5)k++;return k*20};
  return`<div class="lbl">話術</div><div class="act" data-t="self-talk"><b>話術 +${x.b}<small style="color:var(--dim);font-weight:400;margin-left:10px">出目1〜6で ${[1,2,3,4,5,6].map(pc).join("・")}%</small></b></div>`}
@@ -2794,7 +2794,7 @@ FCH.vc=function(a){const m=/^c(\d)$/.exec(a);if(!m)return vcMenu();const i=+m[1]
 function vcPlay(i){s.ev=null;s.fc=null;if(i===1&&!vcS().vv){vcS().vv=1;s.vk=(s.vk||0)+2}vcS()[i]=1;s.pp=0;s.afterCine=()=>vcOpen();cine("ヴェクター",VCT[i],vcLines(i),{btn:"広場に戻る",city:1})}
 Object.assign(DN,{vtown:["航跡守の広場","VECTOR","#ffd36b","港と壁のあいだの、小さな広場。石の腰掛けに、誰かの手の跡が残っている。",["航跡守の老人","「座れ。長い話になる」","「ここの星は、帰ってきた者の星だ。……お前も、その一人になれ」"]]});DA.vtown=[];
 fcReg("vtown","vchap","この星の記憶をたどる",()=>vcAll()?"五つの章を、すべて読んだ。もう一度、読み返せる。":`読了 ${vcS().filter(Boolean).length}/5。`,vcOpen);
-const hiddenArrive_v=hiddenArrive;hiddenArrive=function(){hiddenArrive_v.apply(this,arguments);const h=s.cities.find(c=>c.k==="vector");if(h&&!h.ds.includes("vtown")){h.ds.unshift("vtown");h.sn.unshift(true)}if(h&&!h.ds.includes("lux")){h.ds.push("lux");h.sn.push(true)}};
+const hiddenArrive_v=hiddenArrive;hiddenArrive=function(){hiddenArrive_v.apply(this,arguments);const h=s.cities.find(c=>c.k==="vector");if(h&&!h.ds.includes("vtown")){h.ds.unshift("vtown");h.sn.unshift(true)}};
 /* 前夜 */
 const VNC={eng:"ニコ「工具は、全部、磨いてある。……帰ってきたら、船のペンキ、塗り直そうね」",doc:"ミナ「眠れない人は、温かいお茶を。……全員、無事に戻るのが、一番の治療よ」",gun:"ガロ「砲身は、いつでも、熱くしてある。……合図は、お前が出せ」",trd:"ヨル「値の付かない物を、初めて見に行くんだ。……悪くない取引だと思う」",nav:"ウィラ「おばあちゃんの歌、最後まで歌えそう。……明日、帰ってきたら、聴いてくれる?」",gua:"ゴウ「背中は、守る。……前は、お前が見ろ」",merc:"ザイ「契約は、最後まで有効だ。……延長料金は、帰ってから請求する」",hkr:"ノエ「記録は、全部、送ってある。……万が一のときの、保険だよ」",smug:"ミケ「積み荷は、軽くしておいた。……帰りの船は、身軽なほうがいい」",ai:"オメガ「演算結果:成功率は、算出不能。……ゆえに、同行する」"};
 function vNight(){const o=["<b>終章 ―― 扉の前夜</b>","遺跡の入口に、小さな焚き火が灯った。船の仲間達が、一人、また一人と、輪の中に座る。"];(s.crew||[]).filter(c=>c.mood>0&&VNC[c.k]).slice(0,6).forEach(c=>o.push(VNC[c.k]));
@@ -2847,7 +2847,7 @@ function amMenu(msg){s.fc.st="menu";fcEv("武器屋","ARMS",`${msg?msg+"<br><br>
 function amList(t,msg){s.fc.st=t;const L2=amStock()[t];fcEv(t==="w"?"武器":"防具","ARMS",`${msg?msg+"<br><br>":""}所持金 <b>${s.cred}Cr</b>`,L2.map(g=>{const q=GEAR[g],own=amOwn(g);return{id:"b:"+g,l:`${q.n}`,s:`${"★".repeat(q.rr)}${RRN[q.rr]} ・ ${gs(g)} ・ ${q.pr}Cr${own?" ・ 所持":""}`,d:own||s.cred<q.pr}}).concat([{id:"bk",l:"戻る"}]))}
 function amSell(msg){s.fc.st="s";const own=s.inv.filter(g=>GEAR[g]&&GEAR[g].pr&&!s.fit.includes(g)&&s.sub!==g&&g!=="w0");fcEv("手持ちを売る","ARMS",`${msg?msg+"<br><br>":""}装備中の物は売れない。`,own.map(g=>({id:"s:"+g,l:`${GEAR[g].n}を売る`,s:`${Math.floor(GEAR[g].pr/2)}Cr`})).concat([{id:"bk",l:"戻る"}]))}
 FCH.am=function(a){const f=s.fc;if(a==="bk"||a==="mn")return amMenu();if(a==="mw")return amList("w");if(a==="ma")return amList("a");if(a==="ms")return amSell();
- let m=/^b:(\w+)$/.exec(a);if(m){const g=m[1],q=GEAR[g],t=q.t;if(!amStock()[t].includes(g)||amOwn(g)||s.cred<q.pr)return amList(t,"買えない。");s.cred-=q.pr;s.inv.push(g);say(`「${q.n}」を買った。(-${q.pr}Cr)`);s.pp=1;s.rr={n:"武器屋",stamp:"購入",t:2};return amList(t,`「${q.n}」を買った。「自分」画面で装備しよう。`)}
+ let m=/^b:(\w+)$/.exec(a);if(m){const g=m[1],q=GEAR[g],t=q.t;if(!amStock()[t].includes(g)||amOwn(g)||s.cred<q.pr)return amList(t,"買えない。");s.cred-=q.pr;s.inv.push(g);const r_=amList(t,`「${q.n}」を買った。(「自分」で装備できる)`);say(`「${q.n}」を買った。(-${q.pr}Cr)`);s.pp=1;s.rr={n:"武器屋",stamp:"購入",t:2};draw();return r_}
  m=/^s:(\w+)$/.exec(a);if(m){const g=m[1],q=GEAR[g];if(!q||!s.inv.includes(g)||s.fit.includes(g)||s.sub===g)return amSell();const p=Math.floor(q.pr/2);s.inv=s.inv.filter(x=>x!==g);s.cred+=p;say(`「${q.n}」を売った。(+${p}Cr)`);return amSell(`「${q.n}」を売った。(+${p}Cr)`)}
  amMenu()};
 Object.assign(DN,{arms:["武器屋","ARMS","#ff8a5a","壁一面に、刃と銃が掛かっている。値札だけが、妙に几帳面だ。",["店主のバル","「斬るなら人間。ロボを斬っても、刃が欠けるだけだ」","「電気の通る武器は、少しばかり値が張る。……機械相手なら、元は取れる」"]]});DA.arms=[];
@@ -3073,10 +3073,10 @@ function mfUI(C){const S=mfS();
  let h=`<div class="act"><b>${MFN} ・ ${MFR[rk-1]}(位${rk}/5)</b><span>${rk<5?`信頼 ${S.tp}/${need}`:`信頼 ${S.tp}(最高位)`}<br>${MFD.perk.slice(0,rk).map((p,i)=>`位${i+1}: ${p}`).join("<br>")}</span></div>`;
  if(rk>=5)h+=`<button class="act win" ${S.pool>0?"":"disabled"} onclick="mfPull()"><b>奉納金を受け取る</b><span>溜まっている額: ${S.pool}Cr ・ 事務所で引き出せる</span></button>`;
  if(rk<5&&S.tp>=need){const a=sq().act.find(x=>x.id===qid);h+=`<button class="act win" onclick="mfQuest()"><b>${a?"試し事を続ける":"昇格の試し事"}:『${SQ[qid].t}』</b><span>信頼が十分に集まった</span></button>`}
- h+=`<div class="lbl">組の依頼(報酬は他より多め)</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="mfReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:"ダイス1個 ・ 出目が良いほど信頼と報酬が増える"}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
+ h+=`<div class="lbl">組の依頼(報酬は他より多め)</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="mfReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:`ダイス1個 ・ 重さ${"★".repeat(r.w||1)} ・ 信頼 成功+${r.w||1}/大成功+${2*(r.w||1)}${(r.w||1)>1?` ・ 報酬${r.w}倍`:""}`}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
  h+=`<div class="lbl">上納金</div><div class="tools">${[[10,1],[50,5],[100,11]].map(([c,t])=>`<button class="sm" ${s.cred>=c?"":"disabled"} onclick="mfDon(${c},${t})">${c}Cr</button>`).join("")}</div>`;
- const gl=G.filter(g=>(s.cargo[g[0]]||0)>0&&!["z7","z8"].includes(g[0]));
- h+=`<div class="lbl">納品</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${s.cargo[g[0]]} ・ 1個で信頼${Math.min(5,Math.max(1,Math.round(g[2]/24)))}</span></div><button onclick="mfGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
+ const gl=dvList(C);
+ h+=`<div class="lbl">納品(今日の品 ・ 毎日入れ替わる)</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${dvHeld(g[0])} ・ 1個で信頼${dvTp(g)}${dvDone(C,g[0])?" ・ 今日は納品済み":""}</span></div><button ${dvHeld(g[0])>0&&!dvDone(C,g[0])?"":"disabled"} onclick="mfGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
  const bs=[MFD.bk[0],MFD.bk[1]].concat(rk>=3?[MFD.b3]:[],rk>=4?[MFD.b4]:[],rk>=5?[MFD.b5]:[]);
  h+=`<div class="lbl">書棚</div>`+bs.map(id=>{const b=BOOKS[id];return lib().some(x=>x.id===id)?`<div class="act"><b>${b.t}</b><span>所蔵済み</span></div>`:`<button class="act" ${s.cred>=b.p?"":"disabled"} onclick="relBook('${id}')"><b>${b.t}</b><span>${b.g} ・ ${b.p}Cr</span></button>`}).join("");
  h+=S.lvc?`<button class="act bad" onclick="mfLeave(1)"><b>本当に杯を返す(脱退)</b><span>位・信頼・奉納金がすべて消える。入り直すと、最初から(入会金200Cr)</span></button>`:`<button class="sm" onclick="mfLeave(0)">組を抜ける</button>`;return h}
@@ -3084,12 +3084,12 @@ function mfJoin(){const S=mfS();if(S.rk||s.cred<200||buRk())return draw();s.cred
 function mfLeave(c){if(!c){mfS().lvc=1;return draw()}s.mf={rk:0,tp:0,lvc:0,pool:0};s.mfs=null;s.rr={n:MFN,stamp:"杯を返した"};say(`<b>朧会の杯を返した。</b>カゲは、何も言わず、扉を開けた。`);draw()}
 function mfPull(){const S=mfS();if(S.rk<5||S.pool<1)return draw();const p=S.pool;S.pool=0;s.cred+=p;s.rr={n:"奉納金",stamp:"受け取った"};say(`奉納金を受け取った。(Cr+${p})`);draw()}
 function mfDon(c,t){const S=mfS();if(!S.rk||s.cred<c)return draw();s.cred-=c;const g=mfTp(t);s.rr={n:"上納金",stamp:"上納した"};say(`${c}Crを上納した。(信頼+${g})`);draw()}
-function mfGive(k){if(!mfS().rk||(s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=mfTp(Math.min(5,Math.max(1,Math.round(g[2]/24))));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
+function mfGive(k){if(!mfS().rk||(s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=mfTp(dvTp(g));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
 function mfReq(i){const C=s.cities[s.loc],l=mfRq(C),r=l[i];if(!r||!mfS().rk)return draw();
  if(r.t==="del"){if(catN(r.c)<r.n){say("荷物が足りない。");return draw()}takeCat(r.c,r.n);const t=mfTp(r.tp);s.cred+=r.cr;l.splice(i,1);s.rr={n:MFN,stamp:"依頼達成"};say(`${CAT[r.c]}を納めた。(Cr+${r.cr} 信頼+${t})`);return draw()}
  if(!sd())return;const j=pick(),d=s.dice[j],t=tier(cl6(d.v+vr()));s.dice.splice(j,1);sel=null;s.rr={n:MFN,v:d.v,t,tl:["しくじった…","やり遂げた","見事だった!"]};
  if(t===0){say(`[${d.v}] しくじって、役に立てなかった。(依頼は残っている)`);return draw()}
- const tp=mfTp(t===2?2:1),cr=t===2?18:7;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
+ const w_=r.w||1,tp=mfTp((t===2?2:1)*w_),cr=(t===2?18:7)*w_;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
 function mfQuest(){const S=mfS();if(!S.rk||S.rk>=5||S.tp<MGN[S.rk]||s.mfs)return draw();const qid=`r_M${S.rk+1}`,a=sq().act.find(x=>x.id===qid);s.pp=0;if(a)return sqGo(qid,a.st,1);sq().act.push({id:qid,st:"s0"});say(`<b>試し事を受けた:『${SQ[qid].t}』</b>`);sqGo(qid,"s0",1)}
 function mfEnd(qid,r){const S=mfS();if(r!=="win"||!S.rk)return;if(S.rk<5){S.tp=Math.max(0,S.tp-MGN[S.rk]);S.rk++;say(`<b>${MFN}での位が上がった:${MFR[S.rk-1]}(位${S.rk})</b> ${MFD.perk[S.rk-1]}`)}sq().done.push({id:qid,r})}
 const relEnd_mf=relEnd;relEnd=function(qid,r){if(/^r_M/.test(qid))return mfEnd(qid,r);return relEnd_mf.apply(this,arguments)};
@@ -3356,9 +3356,9 @@ function buReq(i){const C=s.cities[s.loc],l=buRq(C),r=l[i];if(!r||!buS().rk)retu
  if(r.t==="del"){if(catN(r.c)<r.n){say("荷物が足りない。");return draw()}takeCat(r.c,r.n);const t=buTp(r.tp);s.cred+=r.cr;l.splice(i,1);s.rr={n:BUN,stamp:"依頼達成"};say(`${CAT[r.c]}を納めた。(Cr+${r.cr} 信頼+${t})`);return draw()}
  if(!sd())return;const j=pick(),d=s.dice[j],t=tier(cl6(d.v+vr()));s.dice.splice(j,1);sel=null;s.rr={n:BUN,v:d.v,t,tl:["手間取った…","手伝えた","よく働いた!"]};
  if(t===0){say(`[${d.v}] 手間取って、役に立てなかった。(依頼は残っている)`);return draw()}
- const tp=buTp(t===2?2:1),cr=t===2?12:5;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
+ const w_=r.w||1,tp=buTp((t===2?2:1)*w_),cr=(t===2?12:5)*w_;s.cred+=cr;l.splice(i,1);say(`[${d.v}] ${r.x.replace("(手を貸す)","")}。(Cr+${cr} 信頼+${tp})`);draw()}
 function buBribe(c,t){const S=buS();if(!S.rk||s.cred<c)return draw();s.cred-=c;const g=buTp(t);s.rr={n:"賄賂",stamp:"握らせた"};say(`${c}Crを、上司の引き出しに滑り込ませた。(信頼+${g})`);draw()}
-function buGive(k){if(!buS().rk||(s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=buTp(Math.min(5,Math.max(1,Math.round(g[2]/24))));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
+function buGive(k){if(!buS().rk||(s.cargo[k]||0)<1)return draw();const g=G.find(x=>x[0]===k);s.cargo[k]--;const t=buTp(dvTp(g));s.rr={n:"納品",stamp:"納品完了"};say(`${g[1]}を納めた。(信頼+${t})`);draw()}
 function buQuest(){const S=buS();if(!S.rk||S.rk>=5||S.tp<BGN[S.rk])return draw();const qid=`r_B${S.rk+1}`,a=sq().act.find(x=>x.id===qid);s.pp=0;if(a)return sqGo(qid,a.st,1);sq().act.push({id:qid,st:"s0"});say(`<b>昇任の課題を受けた:『${SQ[qid].t}』</b>`);sqGo(qid,"s0",1)}
 function buEnd(qid,r){const S=buS();if(r!=="win"||!S.rk)return;if(S.rk<5){S.tp=Math.max(0,S.tp-BGN[S.rk]);S.rk++;say(`<b>${BUN}での位が上がった:${BUR[S.rk-1]}(位${S.rk})</b> ${BUD.perk[S.rk-1]}`)}sq().done.push({id:qid,r})}
 const relEnd_bu=relEnd;relEnd=function(qid,r){if(/^r_B/.test(qid))return buEnd(qid,r);return relEnd_bu.apply(this,arguments)};
@@ -3372,10 +3372,10 @@ function buUI(C){const S=buS(),a=wlOn()?wlA():{p:0},m=buMul(),pl=Math.round(a.p*
  const rk=S.rk,need=BGN[rk],rq=buRq(C),qid=`r_B${rk+1}`;
  let h=`<div class="act"><b>${BUN} ・ ${BUR[rk-1]}(位${rk}/5)</b><span>${rk<5?`信頼 ${S.tp}/${need}`:`信頼 ${S.tp}(最高位)`}<br>${BUD.perk.slice(0,rk).map((p,i)=>`位${i+1}: ${p}`).join("<br>")}</span></div>`+pay;
  if(rk<5&&S.tp>=need){const q=sq().act.find(x=>x.id===qid);h+=`<button class="act win" onclick="buQuest()"><b>${q?"課題を続ける":"昇任の課題"}:『${SQ[qid].t}』</b><span>信頼が十分に集まった</span></button>`}
- h+=`<div class="lbl">局の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="buReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:"ダイス1個 ・ 出目が良いほど信頼と報酬が増える"}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
+ h+=`<div class="lbl">局の依頼</div>`+(rq.length?rq.map((r,i)=>`<button class="act" ${r.t==="srv"&&!sd()?"disabled":""} onclick="buReq(${i})"><b>${r.x}</b><span>${r.t==="fgt"?fgtTxt(r):r.t==="del"?`納品:${CAT[r.c]}×${r.n}(所持${catN(r.c)}) ・ ${r.cr}Cr+信頼${r.tp}`:`ダイス1個 ・ 重さ${"★".repeat(r.w||1)} ・ 信頼 成功+${r.w||1}/大成功+${2*(r.w||1)}${(r.w||1)>1?` ・ 報酬${r.w}倍`:""}`}</span></button>`).join(""):'<div class="none">今日の依頼は、すべて片づいた。</div>');
  h+=`<div class="lbl">賄賂</div><div class="tools">${[[10,1],[50,5],[100,11]].map(([c,t])=>`<button class="sm" ${s.cred>=c?"":"disabled"} onclick="buBribe(${c},${t})">${c}Cr</button>`).join("")}</div>`;
- const gl=G.filter(g=>(s.cargo[g[0]]||0)>0&&!["z7","z8"].includes(g[0]));
- h+=`<div class="lbl">納品</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${s.cargo[g[0]]} ・ 1個で信頼${Math.min(5,Math.max(1,Math.round(g[2]/24)))}</span></div><button onclick="buGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
+ const gl=dvList(C);
+ h+=`<div class="lbl">納品(今日の品 ・ 毎日入れ替わる)</div>`+(gl.length?gl.map(g=>`<div class="mk"><div>${icG(g[0])}${g[1]}<span>所持${dvHeld(g[0])} ・ 1個で信頼${dvTp(g)}${dvDone(C,g[0])?" ・ 今日は納品済み":""}</span></div><button ${dvHeld(g[0])>0&&!dvDone(C,g[0])?"":"disabled"} onclick="buGive('${g[0]}')">納める</button></div>`).join(""):'<div class="none">納められる荷物がない。</div>');
  const bs=[BUD.bk[0],BUD.bk[1]].concat(rk>=3?[BUD.b3]:[],rk>=4?[BUD.b4]:[],rk>=5?[BUD.b5]:[]);
  h+=`<div class="lbl">書棚</div>`+bs.map(id=>{const b=BOOKS[id];return lib().some(x=>x.id===id)?`<div class="act"><b>${b.t}</b><span>所蔵済み</span></div>`:`<button class="act" ${s.cred>=b.p?"":"disabled"} onclick="relBook('${id}')"><b>${b.t}</b><span>${b.g} ・ ${b.p}Cr</span></button>`}).join("");
  h+=S.lvc?`<button class="act bad" onclick="buLeave(1)"><b>本当に辞職する</b><span>位・信頼がすべて消える。入り直すには、もう一度試験(30Cr)</span></button>`:`<button class="sm" onclick="buLeave(0)">局を辞する</button>`;return h}
@@ -4609,5 +4609,153 @@ function mioNight(){const R=a=>a[Math.floor(Math.random()*a.length)];try{
  if(s.vec)return R(MIO_N.vector.concat(MIO_N.ship));
  if(s.ship&&s.lim&&s.pg/s.lim>=.75&&Math.random()<.6)return R(MIO_N.chase);
  let pool=(s.ship?MIO_N.ship:MIO_N.hotel).slice();if(s.crew&&s.crew.length)pool=pool.concat(MIO_N.crew);if(s.mio&&s.mio.bond>=5)pool=pool.concat(MIO_N.bond,MIO_N.bond);return R(pool)}catch(e){return s.ship?MIO_N.ship[0]:MIO_N.hotel[0]}}
+</script>
+<script id="v41">
+/* ===== v41: 調整まとめ(2026-10-26) ===== */
+const SN=x=>`<small class="sysn">${x}</small>`;
+/* --- 1. ヴェクターに高級薬局を置かない(既存のセーブも掃除) --- */
+function vecNoLux(){try{(s&&s.cities||[]).forEach(c=>{if(c&&c.k==="vector"){const i=c.ds.indexOf("lux");if(i>=0){c.ds.splice(i,1);c.sn.splice(i,1);if(s.cities[s.loc]===c&&s.v==="place"&&s.d>=c.ds.length)s.v="town"}}})}catch(e){}}
+/* --- 2. 近くの衛星への物資調達: 報酬のCrを3倍 --- */
+A.moon.t.forEach(x=>{if(x[1].c)x[1].c*=3});
+/* --- 4. 食料の体力回復: 通常+2、大きい物(1個で2食分)+4 --- */
+["n","fl","rt"].forEach(k=>USE[k]={e:2});["mt","jl","sp"].forEach(k=>USE[k]={e:4});
+/* --- 5. お金だけ貰う仕事は、失敗してもストレスが増えない --- */
+["haul","job","dockjob","sales","chore","fixjob","line","supply"].forEach(id=>{const t=A[id]&&A[id].t[0];if(t&&t[1].s>0){t[1]={...t[1]};delete t[1].s}});
+/* --- 6. 船内メモ --- */
+function memoEsc(x){return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+let memoT=null;function memoIn(v){v=String(v).slice(0,500);s.memo=v;const c=document.getElementById("memoC");if(c)c.textContent=v.length+"/500";clearTimeout(memoT);memoT=setTimeout(()=>{try{pkSave()}catch(e){}},400)}
+{const sf0=selfUI;selfUI=function(){const v=s.memo||"";return sf0.apply(this,arguments)+`<div class="lbl">メモ <small id="memoC" style="color:var(--dim)">${v.length}/500</small></div><textarea class="memo" maxlength="500" placeholder="自由に書き残せる(500文字まで・セーブに保存)" oninput="memoIn(this.value)">${memoEsc(v)}</textarea><div class="lbl" style="margin-top:10px">福引券 ${s.fkT||0}枚</div>`}}
+/* --- 8. 武器屋で買った時のポップ(fcEv が消していた) --- 本体側で修正 */
+/* --- 9. 福引券: 売り子の成功50%・大成功100%、市場で購入時10%(1日1枚まで)。福引は券で引く --- */
+function fkGet(src){s.fkT=(s.fkT||0)+1;say(`福引券を1枚もらった。(${src} ・ 所持${s.fkT}枚)`)}
+const use_v41=use;use=function(id){const r=use_v41.apply(this,arguments);try{if(id==="sales"&&s.rr&&s.rr.n===A.sales.n&&!s.end&&!s.cb){const t=s.rr.t;if(t===2||(t===1&&Math.random()<.5)){fkGet("売り子の手当");draw()}}}catch(e){}return r};
+/* 市場で買うと10%で福引券(1日1枚まで) */
+{const t0=trade;trade=function(k,buy){const c0=s.cred;const r=t0.apply(this,arguments);try{if(buy&&s.cred<c0&&s.fkD!==s.day&&Math.random()<.1){s.fkD=s.day;fkGet("市場のおまけ");draw()}}catch(e){}return r}}
+/* --- 10/14. 施設の最初の案内(説明口調をやめ、会話+短い注記に) --- */
+Object.assign(INTRO,{
+dg:["ダンジョン",["……嫌な空気。奥に、何かいるわ。"+SN("ダンジョンは1日1回挑める。ボスを倒せば踏破。途中で引き返せない。"),"道が分かれてる。どこに入るか、選びましょう。"+SN("各階層で3つの部屋から1つを選ぶ。宝箱=報酬、戦闘=敵、？=何が起きるか分からない、崩れかけた通路=強制ダメージ、休息の間=戦闘ダイス回復。"),"倒れても、拾った物だけは持って帰れるわ。……倒れないのが一番だけど。"+SN("負けても拾った物は持ち帰れる。ただしHP1・体力-2・ストレス+2。HP回復アイテムは階層の途中で使える。")]],
+rel:["宗教施設",["お香の匂い……。ここの人達、身内にはとことん優しいって評判よ。"+SN("入信すると位が付く。お祈り・依頼・納品・お布施で信頼を貯めると、昇格の試練に挑める。位が上がるほど特典が増える。"),"ただ、教団同士はとても仲が悪いの。一つを選んだら、よその門はくぐれないわ。"+SN("入信できるのは1つだけ。位2から、敵対する教団の堂を略奪できる。戦闘になるか盗めるかは運次第で、負ければその時の戦利品を失う。")]],
+res:["黎明戦線",["企業に逆らってる人達の拠点よ。"+SN("入団は無料。依頼・資金援助・物資の提供で信頼を貯めると、昇格任務に挑める。訓練(1日1回・ダイス1個・23Cr)で戦線スキルを覚え、スキルはダンジョンの中でだけ効く。")]],
+arms:["武器屋",["物騒な店ね。……でも、今のあなたには必要なものばかり。"+SN("武器と防具はここで買う。品揃えは日替わりで、栄えた星ほど良い品が並ぶ。"),"相手によって、効く武器が違うの。"+SN("斬=人に強く、ロボ・人外に弱い。電=ロボ・人外に強い。銃=誰にでも少し強いが、弾薬を使う。"),"二本持っておけば、相手を見てから持ち替えられるわ。"+SN("武器はサブにも設定でき、戦闘中に持ち替えられる(行動を消費しない)。")]],
+body:["身体維持",["……言いにくいんだけど。あなたの体、薬がないと保たないの。"+SN("身体保持剤を打たないと、劣化が1日に1ずつ進む。10になると、毎晩50%の確率で身体が崩壊する。"),"見つけたら、多めに買っておいて。どこにでも売ってるわけじゃないから。"+SN("保持剤=全快、簡易薬=3段階、港の廃棄保持剤=1段階戻る。保持剤と簡易薬は闇薬屋(簡易薬は高級薬局にも)で買える。"),"闇薬屋は、目をつけられやすいの。そこだけは気をつけて。"+SN("闇薬屋で買うと監視レベルが少し上がる。薬は「持物」から使う。")]],
+bureau:["星系宇宙局",["お役所よ。治安のいい星にしかない。……税金の取り立ても、ここの仕事。"+SN("局は4日ごとの朝に税を取りに来る。所持金100Cr以下なら来ず、多く持つほど来やすい。無視もできるが、監視ポイントが増える。"),"窓口で少し払えば、見逃してもらえるわ。中に入ってしまう手もあるけど。"+SN("窓口で5Cr払うごとに監視ポイントが下がる。入局試験に受かると局員になり、税を取られなくなる(朧会とは両立できない)。"),"襲うこともできるけど……おすすめはしないわ。"+SN("襲撃は成否にかかわらず監視が大きく上がり、手強い。成功すれば、税は二度と来ない。")]],
+gym:["ジム",["鉄の匂いね。体を作っておけば、いざという時に違うわ。"+SN("入会金100Cr。入会するまで設備は使えない。仕組みはスタッフに聞けば、入会前でも教えてもらえる。"),"続けることが大事よ。"+SN("トレーニングマシンはダイスを使い、出目の分だけTPが貯まる。30貯まると最大HP+1。増えた日は、もう使えない。"),"お金を積めば、いい設備も使わせてもらえるみたい。"+SN("会員ランクは4段階で、お金で上げる。ランクが上がるほど、自販機や高級マシンが使える。")]],
+pachi:["パチンコ店",["……騒がしい店ね。玉の流れる音で、頭が痛くなりそう。"+SN("受付で玉を買い(250玉で125Cr)、台を選んで打つ。台はその星の豊かさで4〜8台。中身は毎日入れ替わる。"),"ここ、時計がないのよ。気づいたら閉店、なんてことになりかねないわ。"+SN("閉店は、台で遊んだ時間の合計が25分になったとき。残り10分と5分で店内放送が入る。閉店した日は、もう打てない。"),"出た玉は、そのままじゃお金にならないの。"+SN("玉は受付で特殊景品(1玉0.5Cr分)に替え、市場や買取所で売る。交換せずに貯玉すれば、どの星のパチンコ店でも引き出せる。")]],
+race:["レース場",["船のレースね。……見てるだけでも、胸が騒ぐわ。"+SN("日によって開かれるレースが変わる。出走=自分の船で参加費を払って参加し、着順で賞金。賭け=他の船に賭ける。出走と賭けはそれぞれ1日1回、同じレースで両方はできない。"),"船の出来が半分、運が半分ってところね。"+SN("順位は性能5割・運5割。レースごとに、耐久・速度・安定性のどれが効くかが違う。"),"賭けは、胴元が儲かるようにできてるの。熱くならないでね。"+SN("賭けの払い戻しの期待値は、賭けた額より少ない。荒れるレースは、下位だと船体が傷つく。グランプリは一度優勝すると、二度と出られない。")]],
+rb:["レアボス",["……待って。いつもと様子が違う。とんでもないのが紛れ込んでるわ。"+SN("ごくまれに、襲撃のある施設にレアボスが現れる。星に着くたびに抽選され、その星にいる間だけいる。"),"一体だけ。でも、見た目よりずっと強いわ。倒せたら、いい物が手に入るはずよ。"+SN("表示の難易度は襲撃と同じだが、実際は一段階強い。倒せば大金とレアな戦利品が手に入る。")]],
+mafia:["朧会",["……ここは、関わる相手を選んだほうがいい場所よ。でも、味方にできれば頼もしいわ。"+SN("加入には入会金200Cr(星系宇宙局とは両立できない)。依頼・上納金・納品で信頼を貯めると、昇格の試し事に挑める。"),"表の仕事より、実入りはいいわ。その分、敵も多いけど。"+SN("組の依頼は報酬が多め。事務所が襲撃を受けることがあり、敵を倒すまで事務所は使えない。最高位になると、奉納金が毎日溜まる。")]]});
+try{if(!MORD.includes("mafia"))MORD.push("mafia")}catch(e){}
+const enter_v41=enter;enter=function(i){const C=s.cities[s.loc],id=C&&C.ds[i];const r=enter_v41.apply(this,arguments);try{if(s.v==="place"&&id==="mafia")introOnce("mafia")}catch(e){}return r};
+/* 黎明戦線: 最初に入った時、副官ナツメが拠点と戦線のことを話す */
+function rsIntro(){if(!s||s.tut||s.rsI)return;s.rsI=1;s.pp=0;setTimeout(()=>storyPlay("黎明戦線","夜明けは、配られない",[
+"|裏路地の階段を下りると、地図を広げた作戦卓の向こうで、短髪の女が顔を上げた。",
+"ナツメ|見ない顔ね。……ああ、噂の逃亡者。追われてるんでしょう? ここの連中は、だいたいそうよ。",
+"ナツメ|私はナツメ。黎明戦線の副官をやってる。企業の配給と借金で首が回らなくなった人間が、最後に流れ着く場所。それがここ。",
+"ナツメ|入るのに、お金は要らない。その代わり、手を貸して。頼みごとを片づけるか、お金を回すか、物資を分けるか。どれでもいい。",
+"ナツメ|信用できると分かったら、もっと大きな仕事を頼むわ。上の連中に顔を通す、昇格の任務よ。",
+"ナツメ|それと、訓練。一日に一度、少しの授業料で、うちの技を教えてあげる。罠のいなし方、傷の塞ぎ方、敵地での嗅覚……。",
+"ナツメ|ただし、うちの技が役に立つのは、企業の施設や遺跡みたいな、地下に潜った時だけ。街中で使うものじゃないわ。",
+"ナツメ|覚えた技は、一度に全部は使えない。最初は一つだけ。位が上がれば、もう一つ持っていけるようになる。",
+"ナツメ|……夜明けは、配られない。奪い返すものよ。気が向いたら、声をかけて。",
+"|【黎明戦線】入団は無料 ・ 依頼/資金援助/物資の提供で信頼が貯まる ・ 信頼が貯まると昇格任務 ・ 訓練は1日1回(ダイス1個・23Cr)で戦線スキルを習得 ・ スキルはダンジョンの中でだけ効き、装備枠は最初1つ(位5で2つ)"],
+()=>{closeOv();draw()},"#e0603a"),0)}
+/* --- 11〜13. 所属施設の依頼と納品 --- */
+function dvTp(g){return Math.min(8,Math.max(2,Math.round(g[2]/15)))}
+function dvList(C){C=C||s.cities[s.loc];const key=C.ds[s.d]||"x";C.dv=C.dv||{};let b=C.dv[key];
+ if(!b||b.d!==s.day){const pool=shuf(G.filter(g=>g[4]!=="z"&&!g[0].includes(".")));const n=4+Math.floor(Math.random()*3);b=C.dv[key]={d:s.day,l:pool.slice(0,n).map(g=>g[0]),done:[]}}
+ return b.l.map(k=>G.find(g=>g[0]===k)).filter(Boolean)}
+function dvKeys(k){return Object.keys(s.cargo).filter(x=>(x===k||x.startsWith(k+"."))&&s.cargo[x]>0)}
+function dvHeld(k){return dvKeys(k).reduce((a,x)=>a+s.cargo[x],0)}
+function dvDone(C,k){C=C||s.cities[s.loc];const b=C.dv&&C.dv[C.ds[s.d]];return !!(b&&b.d===s.day&&b.done.includes(k))}
+function dvMark(C,k){const b=C.dv&&C.dv[C.ds[s.d]];if(b&&!b.done.includes(k))b.done.push(k)}
+["relGive","rsGive","mfGive","buGive"].forEach(fn=>{const f0=window[fn];window[fn]=function(k){const C=s.cities[s.loc];if(!dvList(C).some(g=>g[0]===k)||dvDone(C,k)||dvHeld(k)<1)return draw();const ks=dvKeys(k).sort((a,b)=>a===k?-1:b===k?1:0);const g=G.find(x=>x[0]===k),gv=G.find(x=>x[0]===ks[0])||g;
+ // 産地物でも、品目の値段で信頼を数える
+ const sv=gv[2];gv[2]=g[2];try{dvMark(C,k);return f0.call(this,ks[0])}finally{gv[2]=sv}}});
+/* 依頼: ダイスを使う手伝いが中心。内容ごとに重さ(1〜3)があり、信頼と報酬が変わる */
+function rqW(x){let h=0;for(const ch of String(x))h=(h*31+ch.charCodeAt(0))>>>0;return 1+h%3}
+function rqShape(box,pool){if(!box||box.sh)return;box.sh=1;const l=box.l;
+ for(let i=0;i<l.length;i++){const r=l[i];if(r.t==="del"&&Math.random()<.65)l[i]={t:"srv",x:rnd(pool)+"(手を貸す)"}}
+ if(l.filter(r=>r.t==="srv").length<2)l.push({t:"srv",x:rnd(pool)+"(手を貸す)"});
+ l.forEach(r=>{if(r.t==="srv"&&!r.w)r.w=rqW(r.x);if(r.t==="del"&&!r.dw){r.dw=1;r.tp=r.n+(["m","t","l"].includes(r.c)?1:0)}})}
+{const r0=relRq;relRq=function(C,dk){const l=r0.apply(this,arguments);try{rqShape(C.rq[dk],RSV[dk])}catch(e){}return l}}
+{const r0=rsRq;rsRq=function(C){const l=r0.apply(this,arguments);try{rqShape(C.rq.res,RSV_R)}catch(e){}return l}}
+{const r0=mfRq;mfRq=function(C){const l=r0.apply(this,arguments);try{rqShape(C.rq.mf,RSV_M)}catch(e){}return l}}
+{const r0=buRq;buRq=function(C){const l=r0.apply(this,arguments);try{rqShape(C.rq.bu,RSV_B)}catch(e){}return l}}
+/* --- 出航準備をやめる(確認を1回挟む) --- */
+let dpAsk=0;function dpAskSet(v){dpAsk=v;draw()}
+{const u0=dpUI;dpUI=function(){let h=u0.apply(this,arguments);try{const d=dpS();if(s.ship&&!s.vec&&d.st===1){h+=dpAsk?`<div class="act bad"><b>出航準備をやめる?</b><span>やめると、ここまで進めた準備は最初からやり直しになる。</span></div><div class="tools"><button class="sm" onclick="dpAsk=0;dpCancel()">やめる</button><button class="sm" onclick="dpAskSet(0)">続ける</button></div>`:`<button class="sm" onclick="dpAskSet(1)">準備をやめる</button>`}else dpAsk=0}catch(e){}return h}}
+/* --- 16. 賞金首狩りは1日1回 --- */
+{const m0=mercStart;mercStart=function(id){if(id==="bounty"){if(s.btyD===s.day){say("今日はもう、賞金首を追った。");return draw()}if(sd())s.btyD=s.day}return m0.apply(this,arguments)}}
+{const r0=row;row=function(id){if(id==="bounty"&&s&&s.btyD===s.day)return`<button class="act" disabled><b>${A.bounty.n}</b><span>今日はもう賞金首を追った</span></button>`;return r0.apply(this,arguments)}}
+/* --- 19/23. 追跡の気配: ジャンプ直後に読み直す。「すぐ後ろ」から接触まで約3日 --- */
+{const rd0=radar;radar=function(){let r=rd0.apply(this,arguments);try{if(s&&s.ship&&/追跡の気配:/.test(r)){const C=s.cities[s.loc],rem=s.lim-s.pg,rate=Math.max(.6,1.4+((C&&C.sec)||2)-2),d=rem/rate+(s.nz-.5)*1.2;
+ r=r.replace(/追跡の気配:[^<]*/,"追跡の気配:"+(d<=3.3?"すぐ後ろ ▮▮▮":d<=7?"近い ▮▮▯":"遠い ▮▯▯"))}}catch(e){}return r}}
+{const j0=jump;jump=function(){const fr=s.loc;const r=j0.apply(this,arguments);if(s.loc!==fr)s.nz=Math.random();return r}}
+{const f0=flee;flee=function(){const fr=s.loc;const r=f0.apply(this,arguments);if(s.loc!==fr)s.nz=Math.random();return r}}
+/* --- 20. 依頼が終わった後の様子 --- */
+const SQEP={win:[w=>`数日後、${w}から短い通信が届いた。「あの時は、本当に助かった。……この借りは、いつか返す」`,w=>`${w}は何度も頭を下げてから、雑踏の中へ消えていった。その背中は、来た時より少しだけ軽く見えた。`,w=>`後日、同じ通りで${w}の噂を耳にした。どうやら、あれから上手くやっているらしい。`],
+ lose:[w=>`その後、${w}の消息は、ぷつりと途絶えた。……あの時、別の道を選んでいれば。`,w=>`${w}は何も言わなかった。ただ短く頷いて、背を向けた。`],
+ neutral:[w=>`${w}とは、それきりになった。星系は広い。……また、どこかで会うこともあるだろう。`]};
+const SQMIO={win:["ミオ「……いい顔してる。たまには、こういうのも悪くないでしょう?」","ミオ「お疲れさま。あなたのそういうところ、嫌いじゃないわ」"],lose:["ミオ「落ち込まないで。全部を救える人なんて、いないわ」","ミオ「……次は、もっとうまくやれるわ。私も手伝うから」"],neutral:["ミオ「深入りしないのも、一つの選択よ」"]};
+{const a0=sqAct;sqAct=function(a){const e=s.ev,o=e&&e.opts&&e.opts.find(x=>x.id===a);
+ if(o&&o.k==="end"&&!e.ep&&!/^r_/.test(e.qid||"")&&SQ[e.qid]&&SQ[e.qid].who){try{const q=SQ[e.qid],st=q.steps[(sq().act.find(x=>x.id===e.qid)||{}).st]||{},r=st.end||"neutral",w=q.who||"依頼人";
+  if(r==="win"||r==="lose"||st.end){s.ev={...e,ep:1,sign:"AFTER",text:`${rnd(SQEP[r]||SQEP.neutral)(w)}<br><br>${rnd(SQMIO[r]||SQMIO.neutral)}`,opts:[{...o,l:"閉じる"}]};s.pp=0;return draw()}}catch(x){}}
+ return a0.apply(this,arguments)}}
+/* --- 21. ダンジョン: 部屋の結果を見せてから、次の階層へ --- */
+{const n0=dgNext;dgNext=function(tx){if(s&&s.dg&&tx&&!s.cb&&!s.end&&!window.dgGo){say(tx);s.ev={k:"dgr",t:DG[s.dg.id].n,sign:"DUNGEON",text:tx,opts:[{id:"go",l:"先へ進む",c:"go",s:`${s.dg.f+2>DG[s.dg.id].fl?"最奥へ":"次の階層へ"} ・ HP ${s.php}/${pmax()}`}]};s.pp=0;return draw()}window.dgGo=0;return n0.apply(this,arguments)}}
+{const e0=evAct;evAct=function(a){const e=s.ev;if(e&&e.k==="dgr"){s.ev=null;window.dgGo=1;return dgNext("")}return e0.apply(this,arguments)}}
+/* --- 27. お祈り(寺院)はダイスを使わない。1日1回 --- */
+DA.temple=(DA.temple||[]).filter(x=>x!=="pray");
+fcReg("temple","pray0","祈る",()=>{const C=s.cities[s.loc];return C&&C.pyD===s.day?"今日はもう祈った":"ダイスは使わない ・ 1日1回 ・ ストレスが和らぐ"},()=>{const C=s.cities[s.loc];if(C.pyD===s.day){say("今日はもう祈った。");return draw()}C.pyD=s.day;const r=Math.random(),[tx,e,t]=r<.35?["雑念が消えない",{s:-1},0]:r<.85?["静けさが戻る",{s:-2},1]:["肩の荷が下りた",{s:-3,e:1},2];apply(e);s.pp=1;s.rr={n:"祈る",stamp:tx,t};say(`祈った。${tx}。(${fmt(e)})`);draw()});
+/* --- 3. チュートリアルの文章(会話は自然に、操作の説明は注記に分ける) --- */
+{const TX={
+"下の「街」を押して、宿を出よう":["……起きて。私はミオ。あなたの腕の端末に住んでるAIよ。昨夜の男達、まだこの辺りを嗅ぎ回ってる。お金も船もない今は、とにかく動くしかないわ。","財布の中身、これだけ? ……まずは稼がないとね。"+SN("Cr=所持金。仕事や売却で増え、買い物や宿代で減る。"),"顔色、悪いわよ。無理はしないで。"+SN("体力=0になると倒れて旅が終わる。ダイスの押し込み、失敗、食料切れなどで減る。食事や休養で回復(最大9)。"),"一日にできることには、限りがあるわ。何をするか、よく選んで。"+SN("今日のダイス=1日に行動できる回数。毎朝振られる(体力が多いと4個、少ないと2個)。ダイスを1個選んでから行動のボタンを押す。出目が高いほど有利だが、結果には揺れがある。使い切ったら眠って日を終える。"),"さあ、外に出ましょう。"+SN("下の「街」を押す。")],
+"ダイスを選んで、「通りを歩いて、街を探索する」を押そう":["この街のこと、まだ何も知らないでしょう? 歩いてみれば、何か見つかるはずよ。"+SN("ダイスを1個選んでから「通りを歩いて、街を探索する」を押す。まだ見つけていない施設が見つかる。"),"ここぞという時は、少し無理をするのも手よ。"+SN("「+1に押し込む」=体力1を払って、選んだ出目を+1。「捨てて落ち着く」=ダイスを1個捨てて、ストレス-1。"),"迷ったら、無理のない出目で。"+SN("ボタンの「◎〜×」は、選んだ出目での見込み。失敗・成功・大成功の確率も表示される。")],
+"街のマスを押して、施設に入ろう":["見つけた場所に、入ってみましょう。人がいれば、仕事もあるはずよ。"+SN("街のマスを押すと施設に入れる。施設ごとに、できることが違う。")],
+"ダイスを使って、仕事をしよう":["港なら、荷物運びの手はいつも足りてないはず。"+SN("港のマスに入り、ダイスを選んでから「荷役の仕事」を押す。"),"うまくいけば報酬、しくじれば痛い目を見る。どっちに転ぶかは出目次第ね。"+SN("ボタンの「狙い」は得られるもの、「危険」は失敗したときに起きること。")],
+"市場で、物資を1つ買って売ろう":["何が起きたかは、私がここに書き留めておくわ。"+SN("行動の結果と、増減した数字がここに出る。"),"安く買って、高く売る。……地味だけど、確実よ。"+SN("市場のマスに入り、物資を1つ買って、1つ売る。"),"値札はよく見て。この街の連中、平気で吹っかけてくるから。"+SN("市場では物資を1つずつ売買できる。ダイスは不要。買った物は持物(貨物)に入る。")],
+"下の「持物」を開こう":["持ち物も、確かめておきましょう。"+SN("下の「持物」を押す。"),"食べる物だけは、切らさないでね。空腹じゃ逃げられないわ。"+SN("貨物は20個まで。「持物」で用途が分かる。食料は毎晩自動で食べる。1つもないと体力-2・HP-4・ストレス+2。")],
+"下の「自分」を開こう":["あなた自身のことも、知っておいて。"+SN("下の「自分」を押す。"),"喧嘩に巻き込まれた時の、あなたの強さよ。"+SN("HP=戦闘で減り、0で意識を失う。攻=攻撃、防=防御、反=敵の攻撃を避ける力。"),"相手の動きが読めれば、ずっと楽になるわ。"+SN("命=命中、会=会心(大ダメージが出る確率)、洞=洞察(敵の動きの予測が当たりやすくなる)。"),"チップや改造は便利だけど……入れすぎると、あなたがあなたじゃなくなるわ。"+SN("侵食=チップや身体改造の負担。8以上で毎晩25%で発作、10で正気を失う。装備の付け替えもここで行う。"),"怖い目に遭うと、手が震えるでしょう? それが続くと、本当に動けなくなるの。"+SN("ストレス=3以上で毎朝ダイス1個が1に固まる(5以上で2個)。7以上で眠ると、3回に1回、心が折れて旅が終わる。")],
+"「宿」で眠って、日を終えよう":["今日はもう、休みましょう。"+SN("下の「宿」を押す。"),"眠れば、明日はまた動けるわ。……その間にも、あの男達は近づいてくるけど。"+SN("眠ると夜が明けて、新しいダイスが振られる。宿代と食事が引かれ、追手が近づく。ダイスが余っていても眠れる。"),"この安宿だって、タダじゃないわ。"+SN("宿代は毎晩自動で払う。船を手に入れると、この欄は燃料に変わる。"),"この赤いのが、あの男達との距離。拾える噂から、私が読んでるの。"+SN("追跡の気配=遠い・近い・すぐ後ろの3段階。日が進むほど近づく。")],
+"男達に見つかった! 戦おう":["……見つかった! 逃げ道はない。戦うしかないわ!","落ち着いて。相手の様子を、よく見て。"+SN("上のバーが、敵と自分のHP。"),"相手の構えで、次に何をするか、だいたい分かるの。"+SN("「敵の動き予測」に、通常攻撃・大振り・隙だらけの確率が出る。洞察が高いほど予測が当たる。"),"体が覚えてる動きの分だけ、戦えるわ。"+SN("戦闘ダイス=戦闘専用のダイス。1日の始まりに4個振られ、日をまたぐまで補充されない。使い切っても通常のダイスで戦えるが、一撃は弱くなる。"),"大振りが来たら守って、隙ができたら打ち込む。……行って!"+SN("「攻撃」はダイスを1個使う(命中・会心の%も表示)。「防御」はダイス不要で、受けるダメージを軽くする。道具や逃走も選べる。")],
+"港で、中古の貨物船を買おう":["港へ。……急いで!"],
+"下の「船」を開いて、船の状態を見よう":["中継港に着いたわ。ここまでは、あの連中の目も届かないはず。……まずは、船の具合を見ておきましょう。"+SN("下の「船」を押す。"),"中古にしては、よく飛んでくれたわ。"+SN("船体=耐久(0で撃沈) ・ 貨物=積める数 ・ 客室=仲間の部屋 ・ 砲Lv=迎撃の火力 ・ 情報=他の星を調べるのに使う ・ 借金=追手と話をつけるのに要る額。"),"ここからは、追ってくるのは船よ。回収業者の。"+SN("赤い欄は回収船の気配。毎晩近づき、追いつかれると襲撃される。「すぐ後ろ」になってから、接触まではおよそ3日。")],
+"港で、燃料を補給しよう":["船は、燃料がなきゃただの鉄の箱。……少しだけ、私のへそくりを回すわ。"+SN("港のマスに入り「燃料を入れる」。燃料は時間では減らず、ジャンプや緊急離陸で使う。"),"遠くへ飛ぶほど、たくさん食うの。"+SN("補給は1回につき燃料1。ダイスは不要。ジャンプのたびに、距離に応じて燃料を使う。")],
+"通りを歩いて、施設を3つ以上見つけよう":["大きな港ね。何があるか、見て回りましょう。"+SN("通りを歩いて、施設を3つ以上見つける。")],
+"闇薬屋で、身体保持剤を受け取ろう":["この星には、闇薬屋があるはずよ。……あなたの体のことで、大事な話があるの。"+SN("通りを歩いて闇薬屋を探す。")],
+"闇医者で、戦術チップを作ろう":["闇医者がいるはずよ。身を守る物が要るわ。お金と材料は、私がなんとかする。"+SN("闇医者で戦術チップを作る。"),"腕は確かよ。……ただ、入れすぎには気をつけて。"+SN("闇医者ではチップと身体改造を作れる。武器と防具は武器屋で買う。チップは付け外し自由、身体改造は外せない。どちらも強くなる代わりに侵食が溜まる。品質(通常・レア・エピック・レジェンド)で強さが変わる。")],
+"下の「自分」を開いて、装備を身につけよう":["作っただけじゃ意味がないわ。身につけて。"+SN("下の「自分」から装備する。"),"全部は付けられないから、選んでね。"+SN("装備枠=武器1・防具1・チップ2・身体改造3。")],
+"工房で、船を強化しよう":["船も、少しずつ手を入れていきましょう。まずは荷台を広げたいわね。"+SN("工房で貨物庫を強化する。"),"この船、まだまだ伸びしろがあるわ。"+SN("工房で船を強化できる。貨物庫=貨物の数、客室=仲間の部屋、燃料タンク=燃料の上限、迎撃砲=襲撃されたときの火力。拾った珍しい物を取り付けることもできる。")],
+"船の「仲間」で、今夜の食事をセットしよう":["今夜、何を食べるか決めておきましょう。非常食を二つ、置いておくわね。"+SN("「仲間」画面の「今夜の食事」に、食べる食料をセットする。"),"お腹いっぱいになると、元気が戻るの。"+SN("必要数は、あなたと仲間の人数分。培養肉など高い食料は1個で2食分。必要数を超えると警告が出て、余りは夜に捨てられる。麺屋横丁で食べれば今夜の必要数が減る。セットが足りない夜は、安い食料で自動的に補う。")],
+"船の「航路」で、情報を1つ使って他の星を調べよう":["次に行く星のこと、少し調べておきましょう。知らない星に飛ぶのは、怖いものね。"+SN("船の「航路」で、情報を1つ使って他の星を調べる。"),"どこへ飛ぶかで、追手との距離も変わるわ。"+SN("航路でジャンプ先を選ぶ。行き先は毎回4つの星から。燃料(遠いほど多い)が要り、ジャンプすると距離の分だけ追手を引き離せる。調べていない星は着くまで何も分からず、情報1で少し先が見える。")],
+"航路で「出航準備に入る」を押そう":["飛ぶ前に、船の支度をしないとね。"+SN("船の「航路」を開いて「出航準備に入る」を押す。費用はかからない。"),"エンジンを温めて、航路を計算して……少し時間がかかるの。"+SN("準備値は通常5(安定性を上げるほど減る)。準備中にダイスを使うと準備値が減る(大成功-2・成功-1・失敗±0)。夜を越すと必ず-1。0になると出航待機になり、その日のうちなら出航できる。待機のまま夜を越すと通常に戻る。準備をやめると、最初からやり直しになる。")],
+"準備値を0にして、出航待機にしよう":["手を動かすか、一晩待つか。どっちでも進むわ。"+SN("航路の「ダイスで準備を進める」を使うか、眠って準備値を0にする。")],
+"出航待機のうちに、好きな星を選んで出発しよう":["準備、できたわ。……どこへ行くかは、あなたが決めて。いざとなったら、準備なしで飛ぶこともできるけど、船が傷むわよ。"+SN("出航待機のうちに、行き先を選んでジャンプする。「緊急出航」は準備なしで飛べるが、燃料3と船体1を失う。")]};
+ [1,2].forEach(k=>(OBJ[k]||[]).forEach(o=>{const L=TX[o.t];if(!L)return;if(!Array.isArray(o.g)){o.g=L[0];return}o.g.forEach((g,i)=>{if(L[i]!=null){if(typeof g==="string")o.g[i]=L[i];else g.t=L[i]}})}));
+ {const o=(OBJ[1]||[]).find(x=>/船を買うお金/.test(x.t));if(o)o.g=`振り切れた……けど、この区画はもう囲まれてる。逃げるには、船が要るわ。港で、古い貨物船を売りに出してる男がいるの。${SHIPPRICE}Cr。……貯めましょう。宿代と食事の分は、残しておいてね。`+SN(`港で売っている中古の貨物船は${SHIPPRICE}Cr。宿代は一泊${HOTEL}Cr。`)}}
+crewTut=function(){gqa([{t:"仲間が乗り込んだわね! ……賑やかになりそう。"},
+ {m:"hire",mt:"仲間の暮らし",t:"一緒に暮らすなら、ご飯とお給料は欠かせないわ。"+SN("仲間は客室に1人ずつ住む(客室は工房で増やせる)。毎晩、1人につき食事1食と給料2Crがかかる。食事が足りないと機嫌が下がり、給料が払えないとストレスが溜まる。")},
+ {t:"気持ちよく働いてもらうには、仲良くなるのが一番よ。"+SN("名前の横の♥が機嫌(最大3)。食事抜きなどで下がり、0になると力を貸してくれない。絆が低いままだと、船を降りてしまうこともある。絆(最大5)は「話す」「遊ぶ」「贈る」で深まり、好物を贈ると大きく上がる。絆5で、その仲間だけの特技が目覚める。")},
+ {t:"みんな、疲れもするわ。"+SN("仲間の体力の最大はレベルと同じ(Lv1なら1、最大Lv3で3)。夜に食事をして眠ると回復するが、全快するのは同行・休養の仲間だけ。稼ぎ・訓練をした夜は戻らない。")},
+ {t:"毎日、一人ひとりに何をしてもらうか決めましょう。"+SN("任務は同行・稼ぎ・訓練・休養の4つ。毎日1人に1つ選ぶ。")},
+ {t:"一緒に来てもらえば、仕事がはかどるわ。"+SN("同行=あなたが稼ぐ行動をすると出目にボーナス(1人+1、絆5なら+2、役割が合えばさらに+1。同行は2人まで)。行動のたびに仲間の体力を1使い、0になると付いて来られない。")},
+ {t:"夜のうちに、外で稼いできてくれる人もいるわ。"+SN("稼ぎ=夜に残りの体力を全部使って稼いでくる。体力とレベルが高いほど多く、交渉人は特に多い。たまに戦利品も持ち帰る。治安の悪い星では絡まれて、半分になることも。体力0の日は休養になる。")},
+ {t:"鍛えれば、頼れる仲間になるわ。"+SN("訓練=夜に体力を1使って経験を積む。Lv1→2は2回、Lv2→3は3回でレベルが上がる(最大Lv3)。体力0の日は休養になる。")},
+ {t:"休ませるのも、大事な仕事よ。"+SN("休養=何もせず休む。機嫌+1。夜に食事をして眠れば体力も全快。")},
+ {m:"job",mt:"仲間の任務",t:"まとめると、こんな感じね。"+SN("同行=稼ぐ行動の出目にボーナス(行動ごとに体力1) ・ 稼ぎ=夜に体力を全部使って報酬 ・ 訓練=夜に体力1で経験 ・ 休養=機嫌+1。稼ぎと訓練は、体力0の日は休養になる。"),hl:'[data-t="nav-ship"]'},
+ {t:"さっそく、みんなに声をかけてみて。"+SN("下の「船」→「仲間」で任務を決める。"),hl:'[data-t="nav-ship"]'}]);setTimeout(()=>{try{showGuide()}catch(e){}},0)};
+/* --- 共通: 表示まわり --- */
+const draw_v41=draw;draw=function(){vecNoLux();return draw_v41.apply(this,arguments)};
+{const st=document.createElement("style");st.textContent=`.sysn{display:block;margin-top:8px;padding:6px 8px;border-left:2px solid var(--dim);background:rgba(255,255,255,.04);color:var(--dim);font-size:12px;line-height:1.7;font-family:inherit}
+#pbd .sysn{color:#9aa6c8}
+textarea.memo{width:100%;min-height:110px;box-sizing:border-box;padding:8px 10px;background:var(--pn);border:1px solid var(--ln);border-radius:5px;color:var(--tx);font:14px/1.7 "DotGothic16",sans-serif;resize:vertical}
+textarea.memo:focus{outline:none;border-color:var(--c)}
+button[data-t="jump"]:not(:disabled){border-color:var(--c)!important;color:var(--c)!important;background:rgba(56,242,224,.12)!important;box-shadow:0 0 10px rgba(56,242,224,.45);animation:jg 1.6s ease-in-out infinite}
+@keyframes jg{50%{box-shadow:0 0 18px rgba(56,242,224,.85)}}
+@media (prefers-reduced-motion:reduce){button[data-t="jump"]:not(:disabled){animation:none}}`;document.head.appendChild(st)}
+/* 黎明戦線の案内も手引書へ。古い文面で保存された手引書を新しい文面に差し替え */
+const rsIntro_v=rsIntro;rsIntro=function(){if(!s||s.tut)return;try{MAN.res=[INTRO.res[0],INTRO.res[1].join("<br><br>")];localStorage.setItem("sv-man",JSON.stringify(MAN))}catch(e){}return rsIntro_v()};
+try{let ch=0;Object.keys(MAN).forEach(k=>{if(INTRO[k]){MAN[k]=[INTRO[k][0],INTRO[k][1].join("<br><br>")];ch=1}});if(ch)localStorage.setItem("sv-man",JSON.stringify(MAN))}catch(e){}
+
 </script>
 </body></html>
