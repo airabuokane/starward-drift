@@ -179,7 +179,7 @@ const ALIENS={
     attacks:[{k:'w',t:'wave',max:160,cd:5,wind:0.6,R:160,arc:0.9,mul:1.2,w:1.5},{k:'bm',t:'beam',min:40,max:260,cd:7,wind:0.8,dur:1.4,sweep:0.8,len:260,dps:45,w:1.2},{k:'sl',t:'slam',max:30,cd:6,wind:0.8,R:80,w:1.3},{k:'cb',t:'combo',n:3,gap:0.24,max:14,cd:3.5,w:2},{k:'p',t:'proj',min:80,max:330,cd:4,wind:0.45,w:1}]},
   mimic:{name:'擬態',model:'mimic',size:2,str:3,shape:'humanoid',hp:220,speed:150,r:11,color:'#3b4a63',dmg:22,reach:10,atkCd:0.9,sight:420,points:20,windup:0.3,dormant:true,wakeR:50,officer:true,mimic:true,
     traits:['melee','leap'],captureAt:0.1,attacks:[{k:'c',t:'claw',max:12,cd:1,w:2},{k:'cb',t:'combo',n:4,gap:0.16,max:12,cd:3,w:2},{k:'ch',t:'charge',min:60,max:220,cd:5,wind:0.4,dist:240,speed:520,w:1.5}]},
-  oniBoss:{boss:true,name:'オニ星人',gantzFirst:true,model:'oniBoss',size:4,str:5,shape:'humanoid',hp:420,speed:105,r:20,color:'#5a6a8a',dmg:24,reach:14,atkCd:1,sight:600,points:50,windup:0.45,required:true,
+  oniBoss:{boss:true,name:'オニ星人',gantzFirst:true,model:'oniBoss',size:4,big:1.2,str:5,shape:'humanoid',hp:420,speed:105,r:20,color:'#5a6a8a',dmg:24,reach:14,atkCd:1,sight:600,points:50,windup:0.45,required:true,
     traits:['melee','ranged','leap','hearing'],keepDist:150,captureAt:0.1,proj:{speed:420,dmg:16,r:6,color:'#cff4ff',cd:1.8,volley:3,spread:0.3},
     attacks:[{k:'bm',t:'beam',min:40,max:340,cd:6,wind:0.7,dur:1.2,sweep:0.6,len:340,dps:60,w:1.5},{k:'h',t:'homing',min:80,max:380,cd:6,wind:0.5,n:4,w:1.2},{k:'sl',t:'slam',max:40,cd:5,wind:0.9,R:110,w:1.4},{k:'cb',t:'combo',n:4,gap:0.18,max:16,cd:3.5,w:2},{k:'ch',t:'charge',min:60,max:260,cd:5,wind:0.5,dist:280,speed:520,w:1.4},{k:'th',t:'charge',thunder:true,exact:true,wind:1.3,min:80,max:360,cd:7,dist:360,speed:660,w:1.3,mul:1.3},{k:'g',t:'grab',max:10,cd:6,w:1},{k:'s',t:'scream',max:260,cd:12,wind:0.8,R:260,w:0.8}]},
   nurari:{boss:true,name:'ぬらりひょん',model:'nurari1',size:2,str:5,gachi:400,shape:'humanoid',look:'nurari',hp:180,speed:130,r:12,color:'#4b4060',skin:'#c8bfa8',dmg:23,reach:10,atkCd:1.3,sight:520,points:100,windup:0.4,
@@ -188,7 +188,7 @@ const ALIENS={
     forms:[
       {name:'ぬらりひょん（膨張）',model:'nurari2',size:3,shape:'humanoid',look:'nurari',windup:0.5,hp:260,speed:115,r:30,color:'#5a4a8a',dmg:39,atkCd:1.1,traits:['melee','leap','regen','hearing'],regen:10,
         attacks:[{k:'sp',t:'spin',max:26,cd:6,wind:0.5,R:48,w:1.2},{k:'c',t:'claw',max:12,cd:1.2,w:2},{k:'cb',t:'combo',n:4,gap:0.16,max:14,cd:5},{k:'ch',t:'charge',min:70,max:270,cd:6,dist:300,speed:470,mul:1.2},{k:'sl',t:'slam',max:40,cd:6,R:95,wind:1.0},{k:'r',t:'roar',max:300,cd:12,R:300},{k:'g',t:'grab',max:12,cd:7}]},
-      {name:'ぬらりひょん（真）',model:'nurari3',size:4,shape:'humanoid',look:'nurari',hp:340,speed:120,r:20,color:'#4a3a5a',skin:'#6a5a7a',dmg:45,atkCd:1.1,windup:0.55,traits:['melee','leap','regen','hearing'],regen:22,
+      {name:'ぬらりひょん（真）',model:'nurari3',size:4,big:1.2,shape:'humanoid',look:'nurari',hp:340,speed:120,r:20,color:'#4a3a5a',skin:'#6a5a7a',dmg:45,atkCd:1.1,windup:0.55,traits:['melee','leap','regen','hearing'],regen:22,
         attacks:[{k:'cb',t:'combo',n:4,gap:0.22,max:18,cd:3.5,w:2},{k:'bm',t:'beam',min:40,max:330,cd:7,wind:0.7,dur:1.2,sweep:0.8,len:340,dps:63,w:1.2},{k:'eb',t:'beam',twin:true,min:40,max:420,cd:6.5,wind:0.8,dur:1.0,sweep:0.5,len:420,dps:57,w:1.4,beamH:0.92,col:0xff3a3a},{k:'g',t:'grab',max:12,cd:6,w:1.2,mul:1.5},{k:'sl',t:'slam',max:44,cd:5,wind:0.9,R:110,w:1.4},{k:'c',t:'claw',max:14,cd:1.2,w:2},{k:'r',t:'roar',max:300,cd:12,R:300,w:0.6}]}
     ]},
   gorilla:{name:'ゴリラ',model:'gorilla',size:3,str:3,shape:'humanoid',hp:280,speed:120,r:15,color:'#24221f',dmg:15,reach:12,atkCd:1,sight:460,points:8,windup:0.45,required:true,
@@ -202,7 +202,7 @@ const ALIENS={
     traits:['melee','leap','hearing'],captureAt:0.1,attacks:[{k:'c',t:'claw',max:14,cd:1,w:2.5},{k:'cb',t:'combo',n:3,gap:0.16,max:14,cd:3,w:2},{k:'g',t:'grab',max:12,cd:5,w:1.2},{k:'ch',t:'charge',min:70,max:260,cd:5,wind:0.4,dist:280,speed:560,w:1.4}]},
   rhino:{name:'サイ',model:'rhino',size:3,str:3,shape:'beast',hp:360,speed:105,r:16,color:'#6a6660',dmg:18,reach:14,atkCd:1.3,sight:380,points:8,windup:0.55,required:true,hbH:0.6,
     traits:['melee','hearing'],captureAt:0.1,resist:{sword:0.7},attacks:[{k:'ch',t:'charge',min:50,max:320,cd:3.5,wind:0.7,dist:320,speed:560,w:3,mul:1.4},{k:'sl',t:'slam',max:28,cd:5,wind:0.6,R:50,w:1.5},{k:'st',t:'slam',anim:'stomp',max:24,cd:6,wind:0.6,R:45,w:1},{k:'c',t:'claw',max:12,cd:1.6,w:1}]},
-  hangyo:{boss:true,name:'はんぎょじん星人',model:'hangyo',size:2,str:5,shape:'humanoid',hp:200,speed:140,r:11,color:'#7a9a92',dmg:22,reach:10,atkCd:0.9,sight:520,points:100,windup:0.35,required:true,onlyExplosion:true,
+  hangyo:{boss:true,name:'はんぎょじん星人',model:'hangyo',size:2,str:5,shape:'humanoid',hp:200,speed:140,r:11,color:'#7a9a92',dmg:20,reach:10,atkCd:0.9,sight:520,points:100,windup:0.35,required:true,onlyExplosion:true,
     traits:['melee','leap','spawner','hearing'],spawnType:'hEgg',spawnEvery:9,spawnCap:4,captureAt:0,
     attacks:[{k:'c',t:'claw',max:12,cd:1,w:2.5},{k:'cb',t:'combo',n:3,gap:0.16,max:12,cd:3,w:2},{k:'g',t:'grab',max:10,cd:5,w:1.5,mul:1.3},{k:'ch',t:'charge',min:60,max:240,cd:5,wind:0.35,dist:260,speed:560,w:1.2},{k:'s',t:'scream',max:240,cd:12,wind:0.7,R:220,w:0.6},{k:'tn',t:'tent',min:60,max:320,len:320,cd:7,wind:0.9,w:1.4}]},
   hEgg:{name:'卵',model:'hEgg',size:1,shape:'beast',hp:40,speed:0,r:7,color:'#d8e0b0',dmg:0,points:1,minion:true,traits:[],hatch:6,captureAt:1},
@@ -218,7 +218,7 @@ const ALIENS={
     traits:['melee','hearing'],captureAt:0.1,attacks:[{k:'st',t:'slam',anim:'stomp',max:60,cd:4,wind:1,R:80,w:2},{k:'sl',t:'slam',max:70,cd:5,wind:1.1,R:90,w:1.5},{k:'tl',t:'spin',max:80,cd:7,wind:0.9,R:100,w:1},{k:'mb',t:'beam',min:40,max:380,cd:7,wind:0.9,dur:1.2,sweep:0.5,len:380,dps:55,w:1.4,beamH:0.8,col:0xffe6a0},{k:'r',t:'roar',max:320,cd:14,wind:1,R:300,w:0.6}]},
   kengou:{name:'剣豪',model:'kengou',size:3,str:4,shape:'humanoid',hp:240,speed:120,r:15,color:'#2a3a5a',dmg:15,reach:16,atkCd:0.9,sight:520,points:15,windup:0.32,parry:0.32,midKeep:120,
     traits:['melee','leap','hearing'],captureAt:0.1,attacks:[{k:'zw',t:'wave',slash:true,anim:'claw',min:45,max:210,cd:2.2,wind:0.5,R:215,arc:0.32,mul:1.1,w:5},{k:'zy',t:'wave',slash:true,anim:'spin',min:40,max:160,cd:4.5,wind:0.6,R:165,arc:0.85,w:2},{k:'c',t:'claw',max:18,cd:1.4,w:1.2},{k:'cb',t:'combo',n:3,gap:0.16,max:18,cd:3.5,w:1},{k:'ch',t:'charge',min:60,max:220,cd:6,wind:0.3,dist:240,speed:620,w:0.8,mul:1.3},{k:'sp',t:'spin',max:34,cd:6,wind:0.4,R:44,w:0.6}]},
-  musashi:{boss:true,name:'宮本武蔵',model:'musashi',size:4,str:5,shape:'humanoid',hp:430,speed:125,r:20,color:'#3a3028',dmg:17,reach:20,atkCd:0.8,sight:600,points:70,windup:0.34,parry:0.45,midKeep:140,required:true,
+  musashi:{boss:true,name:'宮本武蔵',model:'musashi',size:4,big:1.2,str:5,shape:'humanoid',hp:430,speed:125,r:20,color:'#3a3028',dmg:17,reach:20,atkCd:0.8,sight:600,points:70,windup:0.34,parry:0.45,midKeep:140,required:true,
     traits:['melee','leap','hearing'],captureAt:0.1,attacks:[{k:'zw',t:'wave',slash:true,anim:'claw',min:50,max:240,cd:2,wind:0.5,R:245,arc:0.3,mul:1.1,w:5},{k:'zx',t:'wave',slash:true,anim:'combo',n:2,min:50,max:220,cd:4,wind:0.55,R:225,arc:0.36,w:3},{k:'zy',t:'wave',slash:true,anim:'spin',min:40,max:180,cd:5,wind:0.65,R:185,arc:0.9,mul:1.2,w:2},{k:'cb',t:'combo',n:3,gap:0.2,max:22,cd:4,w:1},{k:'c',t:'claw',max:22,cd:1.3,w:1,mul:1.4},{k:'sp',t:'spin',max:44,cd:5,wind:0.5,R:56,w:0.8},{k:'ch',t:'charge',min:60,max:280,cd:6,wind:0.35,dist:300,speed:640,w:0.8,mul:1.5},{k:'sl',t:'slam',max:36,cd:6,wind:1.1,R:70,w:0.6,mul:2},{k:'p',t:'proj',min:90,max:320,cd:6,wind:0.4,w:0.6}],
     proj:{speed:460,dmg:16,r:4,color:'#e0e4ec',cd:5,volley:1,spread:0}},
   vamp:{name:'吸血鬼',model:'vamp',size:2,str:4,shape:'humanoid',hp:220,speed:150,r:11,color:'#141418',dmg:18,reach:12,atkCd:0.9,sight:560,points:15,windup:0.3,required:true,
@@ -272,38 +272,38 @@ for(const [k,b] of [['gorillaM','gorilla'],['crocM','croc'],['bearM','bear'],['r
 ALIENS.vampB=Object.assign({},ALIENS.vamp,{name:'吸血鬼（金髪）',model:'vampB',str:5,points:25,hp:200});
 ALIENS.tanaka_boss=Object.assign({},ALIENS.tanaka,{name:'田中星人（ボス）',hMul:1.15,points:10,required:true,boss:true});
 const MISSIONS=[
-  {key:'negi',ballName:'ネギ　せいじん',card:['ねぎ星人','','特徴　ほそい　ぬるぬる','好きなもの　ねぎ　こども','口ぐせ　？？？'],title:'ネギ星人',theme:'residential',place:'夜の市街地',seed:11,time:200,brief:['とくちょう：ネギを持っている','子どもをだいじにする','あまり危なくない…？'],
+  {key:'negi',ballName:'ネギ　せいじん',card:['ねぎ星人','','特徴　ほそい　ぬるぬる','好きなもの　ねぎ　こども'],title:'ネギ星人',theme:'residential',place:'夜の市街地',seed:11,time:200,brief:['とくちょう：ネギを持っている','子どもをだいじにする','あまり危なくない…？'],
     spawn(){const p=freeSpot(550,850);spawnEnemy('negi_child',p.x,p.y);}},
-  {key:'tanaka',ballName:'たなか　せいじん',card:['田中星人','','特徴　かたい　うたがうまい','好きなもの　小鳥　ラヂオ','口ぐせ　ハッハッ'],title:'田中星人',theme:'residential',place:'夜の市街地',seed:23,time:240,brief:['とくちょう：歌がうまい','声を聞いてはいけない','鳥がすき'],
+  {key:'tanaka',ballName:'たなか　せいじん',card:['田中星人','','特徴　かたい　うたがうまい','好きなもの　小鳥　ラヂオ'],title:'田中星人',theme:'residential',place:'夜の市街地',seed:23,time:240,brief:['とくちょう：歌がうまい','声を聞いてはいけない','鳥がすき'],
     spawn(){const p=freeSpot(750,1000);spawnEnemy('tanaka',p.x,p.y);const p2=freeSpot(600,1000);spawnEnemy('tanaka',p2.x,p2.y);for(let i=0;i<4;i++){const q=freeSpot(500,900);spawnEnemy('tori',q.x,q.y);}G.mData={more:false,hold:true};},
     tick(dt){const md=G.mData;if(md.more)return;const tns=G.enemies.filter(e=>e.type==='tanaka');if(G.m.time-G.timeLeft>55||(tns.length&&tns.every(e=>!e.alive))){md.more=true;md.hold=false;for(const t of ['tanaka_boss']){const q=freeSpot(500,900);spawnEnemy(t,q.x,q.y);}msg('どこかで、また歌声が聞こえ始めた…','#ffd27a');}}},
-  {key:'buddha',ballName:'あばれんぼう　せいじん',card:['あばれんぼう星人','','特徴　かたい　でかい　おこってる','好きなもの　おてら','口ぐせ　……'],title:'あばれんぼう星人',theme:'temple',place:'山あいの神社',seed:37,time:270,brief:['とくちょう：お寺にいる','とてもかたい','なかまおもい'],
+  {key:'buddha',ballName:'あばれんぼう　せいじん',card:['あばれんぼう星人','','特徴　かたい　でかい　おこってる','好きなもの　おてら'],title:'あばれんぼう星人',theme:'temple',place:'山あいの神社',seed:37,time:270,brief:['とくちょう：お寺にいる','とてもかたい','なかまおもい'],
     spawn(){spawnEnemy('agyo',1110,720);spawnEnemy('ungyo',1290,720);spawnEnemy('senju',1200,540);}},
-  {key:'chibi',card:['チビ星人','','特徴　ちいさい　はやい　とぶ','好きなもの　たかいところ','口ぐせ　キキキ'],title:'チビ星人',theme:'school',place:'夜の学校',seed:61,time:240,brief:[],
+  {key:'chibi',card:['チビ星人','','特徴　ちいさい　はやい　とぶ','好きなもの　たかいところ'],title:'チビ星人',theme:'school',place:'夜の学校',seed:61,time:240,brief:[],
     spawn(){for(let i=0;i<5;i++)chibiAt(450);G.mData={hold:true,sp:5};},
     tick(dt){const md=G.mData;if(!md||md.sp>=10){if(md)md.hold=false;return;}const n=G.enemies.filter(e=>e.alive&&e.type==='chibi').length;if(n<5){chibiAt(400);md.sp++;}}},
-  {key:'kappe',card:['かっぺ星人','','特徴　でかいのを　かってる','好きなもの　はたけ　きょうりゅう','口ぐせ　だべ'],title:'かっぺ星人',theme:'temple',place:'山あいの神社',seed:71,time:300,brief:[],
+  {key:'kappe',card:['かっぺ星人','','特徴　でかいのを　かってる','好きなもの　はたけ　きょうりゅう'],title:'かっぺ星人',theme:'temple',place:'山あいの神社',seed:71,time:300,brief:[],
     spawn(){spawnEnemy('brachio',1200,600);spawnEnemy('brachioC',1290,660);G.mData={hold:true};},
     tick(dt){const md=G.mData;if(!md.hold)return;if(G.timeLeft<G.m.time/2||!G.enemies.some(e=>e.alive&&e.type==='brachio')){md.hold=false;const q=freeSpot(400,900);spawnEnemy('kappe',q.x,q.y);msg('「だべ〜」どこからか、のんびりした声がした','#ffd27a');}}},
-  {key:'oni',card:['オニ星人','','特徴　つよい　かみなり','好きなもの　よるの　まち','口ぐせ　？？？'],title:'オニ星人',theme:'downtown',place:'駅前の繁華街',seed:81,time:330,brief:[],
+  {key:'oni',card:['オニ星人','','特徴　つよい　かみなり','好きなもの　よるの　まち'],title:'オニ星人',theme:'downtown',place:'駅前の繁華街',seed:81,time:330,brief:[],
     spawn(){for(let i=0;i<12;i++){const p=freeSpot(350,1100);spawnEnemy('oniZ',p.x,p.y);}let p=freeSpot(500,900);spawnEnemy('oniFire',p.x,p.y);p=freeSpot(300,700);spawnEnemy('mimic',p.x,p.y);G.mData={hold:true};},
     tick(dt){const md=G.mData;if(!md.hold)return;if(!G.enemies.some(e=>e.alive&&e.def.officer)){md.hold=false;spawnEnemy('oniBoss',1200,YR[1]);msg('空が鳴った。雷のような音が近づいてくる…','#cff4ff');G.stress=Math.min(1,G.stress+0.4);}}},
-  {key:'kedamono',card:['けだもの星人','','特徴　けものくさい　つよい','好きなもの　にく','口ぐせ　グルル'],title:'けだもの星人',theme:'residential',place:'夜の市街地',seed:91,time:300,brief:[],
+  {key:'kedamono',card:['けだもの星人','','特徴　けものくさい　つよい','好きなもの　にく'],title:'けだもの星人',theme:'residential',place:'夜の市街地',seed:91,time:300,brief:[],
     spawn(){for(const t of ['gorilla','croc','bear','tiger','rhino']){const p=freeSpot(450,1000);spawnEnemy(t,p.x,p.y);}}},
-  {key:'hangyo',card:['はんぎょじん星人','','特徴　ぬるぬる　なにも　きかない','好きなもの　くるま','口ぐせ　？？？'],title:'はんぎょじん星人',theme:'residential',place:'夜の市街地',seed:101,time:300,brief:[],
+  {key:'hangyo',card:['はんぎょじん星人','','特徴　ぬるぬる　なにも　きかない','好きなもの　くるま','嫌いなもの　火　爆発'],title:'はんぎょじん星人',theme:'residential',place:'夜の市街地',seed:101,time:300,brief:[],
     spawn(){const p=freeSpot(500,900);spawnEnemy('hangyo',p.x,p.y);G.mData={};},
     tick(dt){for(const e of G.enemies){if(e.alive&&e.def.hatch&&e.t>e.def.hatch){e.alive=false;fx({k:'smoke',x:e.x,y:e.y,r:12,d:0.6});spawnEnemy('gyoZ',e.x,e.y);}}}},
-  {key:'hyouhon',card:['ひょうほん星人','','特徴　はだかの　にんげん　はんぶん','好きなもの　メス　りか','口ぐせ　？？？'],title:'ひょうほん星人',theme:'school',place:'夜の学校',seed:111,time:270,brief:[],
+  {key:'hyouhon',card:['ひょうほん星人','','特徴　はだかの　にんげん　はんぶん','好きなもの　メス　りか'],title:'ひょうほん星人',theme:'school',place:'夜の学校',seed:111,time:270,brief:[],
     spawn(){const p=freeSpot(500,900);spawnEnemy('hyouhon',p.x,p.y);}},
-  {key:'shoutoku',card:['しょうとく星人','','特徴　いっぱい　あつまる','好きなもの　わ','口ぐせ　ワヲモッテ'],title:'しょうとく星人',theme:'school',place:'夜の学校',seed:121,time:300,brief:[],
+  {key:'shoutoku',card:['しょうとく星人','','特徴　いっぱい　あつまる','好きなもの　わ'],title:'しょうとく星人',theme:'school',place:'夜の学校',seed:121,time:300,brief:[],
     spawn(){for(let i=0;i<8;i++){const p=freeSpot(400,1000);spawnEnemy('shoutoku',p.x,p.y);}G.mData={hold:true,gath:0};},
     tick(dt){const md=G.mData;if(!md.hold)return;if(!G.enemies.some(e=>e.alive&&e.type==='shoutoku')){md.hold=false;spawnEnemy('shoutokuG',1200,800);msg('倒したしょうとく星人たちが真ん中の広場に集まり、ひとつになった…！','#ffd27a');G.stress=Math.min(1,G.stress+0.4);}}},
-  {key:'musashi',card:['宮本武蔵','','特徴　つよい　にとうりゅう','好きなもの　けんか','口ぐせ　？？？'],title:'宮本武蔵',theme:'temple',place:'山あいの神社',seed:131,time:300,brief:[],
+  {key:'musashi',card:['宮本武蔵','','特徴　つよい　にとうりゅう','好きなもの　けんか'],title:'宮本武蔵',theme:'temple',place:'山あいの神社',seed:131,time:300,brief:[],
     spawn(){const Z=G.city.TC||{x:430,y:200,w:1540,h:1200};for(let i=0;i<2;i++){const cx=i?Z.x+Z.w-260:Z.x+260,cy=Z.y+Z.h*0.5;let p={x:cx,y:cy};for(let t=0;t<120;t++){const x=cx+rand(-90,90),y=cy+rand(-200,200);if(!insideSolid(x,y,16)&&!hollowAt(x,y)){p={x,y};break;}}const e=spawnEnemy('kengou',p.x,p.y);if(e)e.data.vi=i;}G.mData={hold:true};}, // 剣豪は境内の左右に分かれて配置
     tick(dt){const md=G.mData;if(!md.hold)return;if(!G.enemies.some(e=>e.alive&&e.type==='kengou')){md.hold=false;const q=freeSpot(400,800);spawnEnemy('musashi',q.x,q.y);msg('さらに大きな影が、二本の刀を抜いた…','#ff9f43');}}},
-  {key:'vamp',card:['吸血鬼','','特徴　くろい　きんぱつ','好きなもの　よる　ち','口ぐせ　？？？'],title:'吸血鬼',theme:'downtown',place:'駅前の繁華街',seed:141,time:300,brief:[],
+  {key:'vamp',card:['吸血鬼','','特徴　くろい　きんぱつ','好きなもの　よる　ち'],title:'吸血鬼',theme:'downtown',place:'駅前の繁華街',seed:141,time:300,brief:[],
     spawn(){const p=freeSpot(500,900);spawnEnemy('vamp',p.x,p.y);spawnEnemy('vamp',p.x+30,p.y+20);spawnEnemy('vampB',p.x-25,p.y+25);spawnEnemy('vamp',p.x-30,p.y-20);}},
-  {key:'last',last:true,survive:true,day:true,card:['？？？','','特徴　いっぱい','好きなもの　？？？','口ぐせ　？？？','','いきのこれ'],title:'ラストミッション',theme:'residential',place:'昼の市街地',seed:151,time:420,brief:[],
+  {key:'last',last:true,survive:true,day:true,card:['？？？','','特徴　いっぱい','好きなもの　？？？','','いきのこれ'],title:'ラストミッション',theme:'residential',place:'昼の市街地',seed:151,time:420,brief:[],
     spawn(){G.mData={hold:true,waveT:5,n:0};},
     tick(dt){const md=G.mData;
       // 制限時間は7分だが、残り4分で強制終了（生き残った扱いで転送）
@@ -312,13 +312,13 @@ const MISSIONS=[
       const pool=['gargoyleS','gargoyleS','angelS','angelS','davidS','goddessS'];const p=G.player;
       for(let i=0;i<3+Math.min(3,md.n);i++){const t=pool[Math.floor(Math.random()*pool.length)];const a=rand(0,TAU),d=rand(320,520);const q={x:clamp(p.x+Math.cos(a)*d,AREA.x+40,AREA.x+AREA.w-40),y:clamp(p.y+Math.sin(a)*d,AREA.y+40,AREA.y+AREA.h-40)};const e=spawnEnemy(t,q.x,q.y);if(e)e.target=p;}
       msg(md.n===1?'どこからか、石の擦れる音が近づいてくる…':'また何かが来る…','#ff9f43');}},
-  {key:'jeans',ballName:'じーんず　せいじん',card:['ジーンズ星人','','特徴　じーんず　すにーかー','好きなもの　ファッション','口ぐせ　？？？'],title:'ジーンズ星人',theme:'downtown',place:'駅前の繁華街',seed:61,time:240,brief:[],
+  {key:'jeans',ballName:'じーんず　せいじん',card:['ジーンズ星人','','特徴　じーんず　すにーかー','好きなもの　ファッション'],title:'ジーンズ星人',theme:'downtown',place:'駅前の繁華街',seed:61,time:240,brief:[],
     spawn(){for(const t of ['jeansS','jeansM','jeansL'])for(let i=0;i<3;i++){const p=freeSpot(380,950);spawnEnemy(t,p.x,p.y);}}},
-  {key:'kurofuku',ballName:'くろふく　せいじん',card:['黒服星人','','特徴　くろい　ふく','好きなもの　ぶき','口ぐせ　？？？'],title:'黒服星人',theme:'school',place:'夜の学校',seed:131,time:270,brief:[],
+  {key:'kurofuku',ballName:'くろふく　せいじん',card:['黒服星人','','特徴　くろい　ふく','好きなもの　ぶき'],title:'黒服星人',theme:'school',place:'夜の学校',seed:131,time:270,brief:[],
     spawn(){for(const t of ['kuroY','kuroX','kuroXS','kuroS','kuroS']){const p=freeSpot(400,900);const e=spawnEnemy(t,p.x,p.y);if(e){e.data.hair=pickR(Math.random,['#111111','#2a1f18','#3a2a1a','#5a3a20','#9a7a4a']);e.data.hs=pickR(Math.random,[0,1,2,3,4,5,9,10,12]);e.data.ksuit=ALIENS[t].suitHP*STR_MUL[4].hp;}}}},
-  {key:'tora',ballName:'とら　せいじん',card:['トラ星人','','特徴　たべるほど　つよくなる','好きなもの　にく','口ぐせ　ガルル'],title:'トラ星人',theme:'downtown',place:'夜の繁華街',seed:171,time:300,brief:[],
+  {key:'tora',ballName:'とら　せいじん',card:['トラ星人','','特徴　たべるほど　つよくなる','好きなもの　にく'],title:'トラ星人',theme:'downtown',place:'夜の繁華街',seed:171,time:300,brief:[],
     spawn(){const p=freeSpot(650,1000);spawnEnemy('tora',p.x,p.y);for(const t of ['gorillaM','crocM','bearM','rhinoM'])for(let i=0;i<3;i++){const q=freeSpot(350,1000);spawnEnemy(t,q.x,q.y);}}},
-  {key:'nurari',ballName:'ぬらりひょん',card:['ぬらりひょん','','特徴　きづいたら　そこにいる','好きなもの　？？？','口ぐせ　？？？'],title:'ぬらりひょん',theme:'downtown',place:'駅前の繁華街',seed:51,time:320,brief:['とくちょう：気づくと そこにいる','とてもつよい','しぶとい'],
+  {key:'nurari',ballName:'ぬらりひょん',card:['ぬらりひょん','','特徴　きづいたら　そこにいる','好きなもの　？？？'],title:'ぬらりひょん',theme:'downtown',place:'駅前の繁華街',seed:51,time:320,brief:['とくちょう：気づくと そこにいる','とてもつよい','しぶとい'],
     spawn(){const p=freeSpot(500,900);spawnEnemy('nurari',p.x,p.y);for(let i=0;i<9;i++){const q=freeSpot(400,1000);spawnEnemy('youkai',q.x,q.y);}const g2=freeSpot(600,1000);spawnEnemy('gyuki',g2.x,g2.y);}}
 ];
 
@@ -1657,7 +1657,7 @@ function spawnEnemy(type,x,y){
   const e={kind:'enemy',type,def:d,name:d.name,x,y,r:d.r,hp:d.hp,hpMax:d.hp,speed:d.speed,dmg:d.dmg,color:d.color,
     traits:d.traits.slice(),cd:rand(0.3,1),target:null,lastSeenT:-9,ang:0,alive:true,captured:false,capT:0,
     t:0,data:{},lastDmgT:-99,buff:1,formIndex:0,revealed:false,seen:false,roof:null,jump:null,z:0,kb:null,stun:0,walk:0,flying:false};
-  if(d.size)e.r=SIZE_R[d.size]*(d.rMul||1);if(d.gachi)e.gachi=e.gachiMax=d.gachi*(d.str?STR_MUL[d.str].hp:1);if(d.str){const m=STR_MUL[d.str];e.hp=e.hpMax=d.hp*m.hp;e.dmg=d.dmg*m.dmg;}
+  if(d.size)e.r=SIZE_R[d.size]*(d.rMul||1);if(d.big)e.r*=d.big;if(d.gachi)e.gachi=e.gachiMax=d.gachi*(d.str?STR_MUL[d.str].hp:1);if(d.str){const m=STR_MUL[d.str];e.hp=e.hpMax=d.hp*m.hp;e.dmg=d.dmg*m.dmg;}
   e.dmg*=DMG_MUL;e.speed*=SPD_MUL;
   initTraits(e);
   if(d.items)e.items={bottle:{hp:45,alive:true},clock:{hp:45,alive:true}},e.itemW={},e.data.healT=7;
@@ -1668,7 +1668,7 @@ function initTraits(e){e.data={};e.flying=false;for(const t of e.traits)if(TRAIT
 function applyForm(e,f){
   const keepHeal=e.data.healT;
   e.def=Object.assign({},ALIENS[e.type],f);
-  e.name=f.name;e.hp=e.hpMax=f.hp*(e.def.str?STR_MUL[e.def.str].hp:1);if(e.def.size)e.r=SIZE_R[e.def.size];e.speed=f.speed*SPD_MUL;e.dmg=f.dmg*DMG_MUL;e.r=f.r;e.color=f.color;e.traits=f.traits.slice();
+  e.name=f.name;e.hp=e.hpMax=f.hp*(e.def.str?STR_MUL[e.def.str].hp:1);if(e.def.size)e.r=SIZE_R[e.def.size];e.speed=f.speed*SPD_MUL;e.dmg=f.dmg*DMG_MUL;e.r=f.r*(f.big||1);e.color=f.color;e.traits=f.traits.slice();
   e.captured=false;e.jump=null;e.cd=1;
   initTraits(e);if(e.items)e.data.healT=keepHeal||7;
   fx({k:'ring',x:e.x,y:e.y,r:90,color:'#ff4d6d',d:0.8});
@@ -3292,7 +3292,7 @@ function update(dt){
     for(const c of G.cars||[])if(!c.dead&&Math.hypot(c.x-z.x,c.y-z.y)<R)hitCar(c,99,z.src);
     brkArea(z.x,z.y,R,180,z.src);for(const w of G.wins||[])if(!w.open&&(w.k||0)<=1&&Math.hypot(w.x+w.w/2-z.x,w.y+w.h/2-z.y)<R)breakWin(w,z.src);// Zガンは壊せる物と窓も押しつぶす
     for(const e of G.enemies)if(e.alive&&Math.hypot(e.x-z.x,e.y-z.y)<R+e.r){const wasSt=e.stun>0;damageEnemy(e,180,z.src,'z');if(e.alive){// 止める時間は1.2秒から。食らうたびに大きさに応じて短くなる。止まっている間に食らっても延びない
-      if(!wasSt){const zr={5:0.25,4:0.2,3:0.15,2:0.1,1:0.05}[e.def.size||2]||0.1,st=Math.max(0,1.2-(e.data.zHits||0)*zr);e.data.zHits=(e.data.zHits||0)+1;if(st>0)e.stun=st;e.data.squash=st>0?1.0:0.3;}else e.data.squash=0.3;}else G.stains.push({x:e.x,y:e.y,r:e.r*2.2,c:'rgba(90,0,10,.7)'});}
+      if(!wasSt){const zr=({5:0.25,4:0.2,3:0.15,2:0.1,1:0.05}[e.def.size||2]||0.1)+(e.def.str||1)*0.1/3,st=Math.max(0,1.2-(e.data.zHits||0)*zr);e.data.zHits=(e.data.zHits||0)+1;if(st>0)e.stun=st;e.data.squash=st>0?1.0:0.3;}else e.data.squash=0.3;}else G.stains.push({x:e.x,y:e.y,r:e.r*2.2,c:'rgba(90,0,10,.7)'});}
     for(const h of HUM())if(h.alive&&h.present&&Math.hypot(h.x-z.x,h.y-z.y)<R*0.9)damageHuman(h,15,null,{kind:'zgun'});}}
   G.zq=G.zq.filter(z=>!z.done);
   for(const s of G.shots){
@@ -4346,9 +4346,9 @@ function makePuddles(sc){
   const base=new THREE.Color(DAY?(R3.dusk?0x7a5a50:0x7890a8):0x161d26);
   const pos=[],col=[],uv=[],R=mulberry32?mulberry32(((C.seed||7)*131+17)>>>0):Math.random;const rr=()=>R();
   let n=0;for(let t=0;t<4000&&n<110;t++){const x=rr()*MAP.w,y=rr()*MAP.h;if(!okAt(x,y))continue;
-    const ra=6+rr()*14,rb=ra*(0.45+rr()*0.45),an=rr()*Math.PI,K=11,ca=Math.cos(an),sa=Math.sin(an);
+    const ra=rr()<0.2?25+rr()*10:6+rr()*14,rb=ra*(0.45+rr()*0.45),an=rr()*Math.PI,K=11,ca=Math.cos(an),sa=Math.sin(an);
     // 縁が全部舗装の上か確認
-    let ok=true;const ring=[];for(let k=0;k<K;k++){const a=k/K*TAU,w=0.78+rr()*0.3,lx=Math.cos(a)*ra*w,ly=Math.sin(a)*rb*w,px=x+lx*ca-ly*sa,py=y+lx*sa+ly*ca;if(!okAt(px,py)){ok=false;break;}ring.push([px,py]);}
+    let ok=true;const ring=[];for(let k=0;k<K;k++){const a=k/K*TAU,w=0.82+rr()*0.24,lx=Math.cos(a)*ra*w,ly=Math.sin(a)*rb*w,px=x+lx*ca-ly*sa,py=y+lx*sa+ly*ca;if(!okAt(px,py)){ok=false;break;}ring.push([px,py]);}
     if(!ok)continue;n++;
     const c=base.clone();for(const L of lights){const d=Math.hypot(L.x-x,L.y-y);if(d<L.r){const k=(1-d/L.r);c.add(L.c.clone().multiplyScalar(k*k*(DAY?0.04:0.28)));}}c.r=Math.min(c.r,0.42);c.g=Math.min(c.g,0.42);c.b=Math.min(c.b,0.46);if(DAY){c.copy(base);}
         for(let k=0;k<K;k++){const a=ring[k],b=ring[(k+1)%K];
@@ -4362,13 +4362,19 @@ function makePuddles(sc){
     for(let i=0;i<7;i++){const cx=Rq()*w,cy=Rq()*h,ph=(Rq()+f/4)%1,rad=2+ph*12;x.strokeStyle='rgba(255,255,255,'+(0.85*(1-ph)).toFixed(2)+')';x.lineWidth=1.3;x.beginPath();x.ellipse(cx,cy,rad,rad*0.9,0,0,TAU);x.stroke();}}));}
   fr.forEach(t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;});
   const mat=new THREE.MeshBasicMaterial({vertexColors:true,map:fr[0],transparent:true,opacity:DAY?0.5:0.85,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
-  const m=new THREE.Mesh(gm,mat);m.userData.keep=true;m.renderOrder=1;sc.add(m);R3.rain.pud={m,fr,t:0,i:0};}
+  const m=new THREE.Mesh(gm,mat);m.userData.keep=true;m.renderOrder=1;sc.add(m);R3.rain.pud={m,fr,t:0,i:0,wf:[],wm:[]};
+  // 道頓堀（水路）とプールの水面に波紋を重ねる（雨の日だけ）
+  const W=[];if(C.can)W.push({x:0,y:C.can.w0,w:MAP.w,h:C.can.w1-C.can.w0,lv:-35.6});if(C.pool)W.push({x:C.pool.x,y:C.pool.y,w:C.pool.w,h:C.pool.h,lv:-3.6});
+  if(W.length){const P=R3.rain.pud;for(let f=0;f<4;f++){const t=canvasTex(128,128,(x,w,h)=>{x.clearRect(0,0,w,h);const Rq=mulberry32(f*977+5);
+      for(let i=0;i<22;i++){const cx=Rq()*w,cy=Rq()*h,ph=(Rq()+f/4)%1,rad=1.5+ph*8;x.strokeStyle='rgba(225,238,250,'+(0.7*(1-ph)).toFixed(2)+')';x.lineWidth=1;x.beginPath();x.ellipse(cx,cy,rad,rad*0.9,0,0,TAU);x.stroke();}});t.wrapS=t.wrapT=THREE.RepeatWrapping;P.wf.push(t);}
+    for(const q of W){const g2=new THREE.PlaneGeometry(q.w,q.h);const ua=g2.attributes.uv.array;for(let i=0;i<ua.length;i+=2){ua[i]*=q.w/60;ua[i+1]*=q.h/60;}
+      const wm=new THREE.MeshBasicMaterial({map:P.wf[0],transparent:true,opacity:DAY?0.3:0.38,depthWrite:false});const wp=new THREE.Mesh(g2,wm);wp.rotation.x=-Math.PI/2;wp.position.set(q.x+q.w/2,q.lv,q.y+q.h/2);wp.userData.keep=true;wp.renderOrder=2;sc.add(wp);P.wm.push(wp);}}}
 // 濡れた武器：手元の銃や刀につやを出して少し暗くする（雨の無いマップでは元に戻す）
 const WETM=new WeakMap();function wetMat(m){if(!(m.isMeshLambertMaterial||m.isMeshPhongMaterial||m.isMeshStandardMaterial))return m;let w=WETM.get(m);if(!w){w=new THREE.MeshPhongMaterial({color:m.color.clone().multiplyScalar(0.8),map:m.map||null,shininess:150,specular:0xb8c4d0,emissive:m.emissive?m.emissive.clone():0,transparent:m.transparent,opacity:m.opacity,side:m.side});WETM.set(m,w);}return w;}
 function wetVM(on){if(!R3||!R3.vmScene)return;R3.vmScene.traverse(o=>{if(!o.isMesh||!o.material)return;
     if(on&&!o.userData.dryMat){o.userData.dryMat=o.material;o.material=Array.isArray(o.material)?o.material.map(wetMat):wetMat(o.material);}
     else if(!on&&o.userData.dryMat){o.material=o.userData.dryMat;delete o.userData.dryMat;}});}
-function rainTick(dt){const Rn=R3.rain;if(!Rn)return;if(Rn.pud){const P=Rn.pud;P.t+=dt;if(P.t>0.11){P.t=0;P.i=(P.i+1)%4;P.m.material.map=P.fr[P.i];}}Rn.vmT-=dt;if(Rn.vmT<=0){Rn.vmT=1;wetVM(true);}const c=R3.cam,p=G&&G.player;Rn.m.visible=!(p&&hollowAt(p.x,p.y));if(!Rn.m.visible)return;Rn.m.position.set(c.position.x,0,c.position.z);
+function rainTick(dt){const Rn=R3.rain;if(!Rn)return;if(Rn.pud){const P=Rn.pud;P.t+=dt;if(P.t>0.11){P.t=0;P.i=(P.i+1)%4;P.m.material.map=P.fr[P.i];for(const w of P.wm)w.material.map=P.wf[P.i];}}Rn.vmT-=dt;if(Rn.vmT<=0){Rn.vmT=1;wetVM(true);}const c=R3.cam,p=G&&G.player;Rn.m.visible=!(p&&hollowAt(p.x,p.y));if(!Rn.m.visible)return;Rn.m.position.set(c.position.x,0,c.position.z);
   const P=Rn.pos,dy=560*dt;for(let i=0;i<Rn.N;i++){const k=i*6;let y=P[k+1]-dy;if(y<0)y+=320;P[k+1]=y;P[k+4]=y+7;}Rn.m.geometry.attributes.position.needsUpdate=true;}
 function build3D(C){
   init3D();CUR_THEME=C.theme;
@@ -4782,10 +4788,9 @@ function humanModel(o){
   for(const z of [-1,1]){const lap=CP(boxM(0.5,7,3,cloth2));lap.position.set(4.7,42.4,z*2.6);lap.rotation.x=z*0.4;body.add(lap);const pk=CP(boxM(0.4,3,3.4,cloth2));pk.position.set(4.6,31,z*4.4);body.add(pk);}
   const seams=[];for(const z of [-7.6,7.6]){const s=boxM(0.6,17,0.6,seam);s.position.set(4.7,36,z*0.8);body.add(s);seams.push(s);}
   const sp=boxM(0.6,17,0.6,seam);sp.position.set(-4.7,36,0);body.add(sp);seams.push(sp);
-  // 腕：肩・肘・手首のカフ・指
+  // 腕：肩・肘・手首のカフ・手
   const armL=limbP(21,2.6,suit,0,44,-10),armR=limbP(21,2.6,suit,0,44,10);
   for(const A of [armL,armR]){const hnd=sphM(2.7,skin,7,6);hnd.scale.set(0.9,1.1,0.8);hnd.position.y=-22;A.add(hnd);
-    for(let k=-1;k<=1;k++){const f=boxM(0.9,2.6,0.9,skin);f.position.set(0.8,-24.4,k*1.05);f.rotation.z=0.25;A.add(f);}const th=boxM(0.9,2,0.9,skin);th.position.set(1.4,-22,A===armL?1.9:-1.9);A.add(th);
     const shp=sphM(3.6,suit,10,8);shp.position.y=-0.5;A.add(shp);
     const ln=SP(boxM(0.4,18,0.4,seam));ln.position.set(2.5,-10,0);A.add(ln);const sl=CP(cylM(2.9,2.9,1.4,cloth2,10));sl.position.y=-17.6;A.add(sl);}
   if(o.accent){const ab=boxM(5.4,2.4,5.4,lam(hexN(o.accent),hexN(o.accent)));ab.position.y=-5;armL.add(ab);}
@@ -5164,7 +5169,7 @@ CHARS.nioA={desc:'口を開いた仁王像（おこりんぼう星人）。巨�
 CHARS.nioU={desc:'口を結んだ仁王像（あばれんぼう星人）。おこりんぼう星人と挟み撃ちにしてくる。',pose:poseRig,build:e=>buildNio(e,false)};
 
 /* ---------- 既存の enemyModel / poseEnemy に組み込む ---------- */
-function charScale(e){return (SIZE_H[e.def.size]||40)*(e.def.hMul||1)/100;}
+function charScale(e){return (SIZE_H[e.def.size]||40)*(e.def.hMul||1)*(e.def.big||1)/100;}
 function buildChar(e){const C=CHARS[e.def.model];const M=C.build(e);M.charKey=e.def.model;M.g.scale.setScalar(charScale(e));return M;}
 
 /* ---------- キャラ確認（ギャラリー） ---------- */
@@ -7108,7 +7113,7 @@ const RLINES3={
   roomNew:{好戦的:['おい、誰か説明しろよ','喧嘩売ってんのか、これ'],冷静:['全員、ここに来る前の記憶は？','……私、たしか事故に'],臆病:['い、今、人が光の中から……','ドア、開かないの……？'],懐疑的:['マンションの一室か、ここ','スマホ、圏外だ'],自信過剰:['へえ、面白そうなことになってんじゃん'],優しい:['怪我をしてる人はいませんか？'],子:['おにいちゃんたち、だれ？'],老:['近頃の若いもんは……いや、そういう話ではないか']},
   vet:{_:['質問は後にしろ','あの球が開いたら、すぐ準備しろ','死にたくなきゃ、言う通りにしろ','今回も、全員は帰れねえぞ']},
   scared:{_:['……また、あの夜が来る','寝てても、夢に出るんだ','どうして、俺たちなんだろうな']},
-  ballRead:{_:['この絵、本当にいるのか？','口ぐせって……なんだよ','点数の書き方、ふざけてるだろ']},
+  ballRead:{_:['この絵、本当にいるのか？','点数の書き方、ふざけてるだろ']},
   suit:{_:['伸びる……変な素材だな','サイズ、なんで合ってるんだ'],臆病:['これ着たら、戦わなきゃいけないの……？']},
   open:{_:['うわ、中から何か出てきた！','武器……ってことか？']}};
 const RLINES2={
@@ -7250,8 +7255,8 @@ function buildRoom3D(){
   init3D();
   if(R3.room){disposeTree(R3.room.sc);R3.room=null;}
   const sc=new THREE.Scene();sc.background=new THREE.Color(0x000000);
-  sc.add(new THREE.AmbientLight(0x8a8a90,0.55));
-  const L=new THREE.PointLight(0xfff0dd,1.1,420,1.2);L.position.set(95,52,75);sc.add(L);
+  sc.add(new THREE.AmbientLight(0x8a8a90,0.44));
+  const L=new THREE.PointLight(0xfff0dd,0.88,420,1.2);L.position.set(95,52,75);sc.add(L);
   const W2=ROOM.w,Hh=ROOM.h,CEIL=58;
   // ---- 部屋の内装（床・壁・天井）
   const floorT=canvasTex(256,256,(x,w,h)=>{x.fillStyle='#735538';x.fillRect(0,0,w,h);for(let i=0;i<8;i++){const off=(i*61)%(w/2);for(let s=-1;s<3;s++){const c=['#7a5a3e','#6e5036','#82623f','#735538'][(i+s+4)%4];x.fillStyle=c;x.fillRect(off+s*w*0.5,i*32,w*0.5,31);}
@@ -7367,7 +7372,7 @@ function buildRoom3D(){
     const bf=new THREE.Mesh(new THREE.PlaneGeometry(B.w,B.h),cf);bf.rotation.x=-Math.PI/2;bf.position.set(B.x+B.w/2,0.05,B.y+B.h/2);sc.add(bf);
     const bc=new THREE.Mesh(new THREE.PlaneGeometry(B.w,B.h),cm);bc.rotation.x=Math.PI/2;bc.position.set(B.x+B.w/2,CEIL,B.y+B.h/2);sc.add(bc);
     for(const [x,z,w,ry] of [[B.x+B.w/2,B.y,B.w,0],[B.x+B.w/2,B.y+B.h,B.w,Math.PI],[B.x+B.w,B.y+B.h/2,B.h,-Math.PI/2]]){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,CEIL),cm);m.position.set(x,CEIL/2,z);m.rotation.y=ry;sc.add(m);}
-    const bl=new THREE.PointLight(0xd8e4ff,0.9,110,1.6);bl.position.set(B.x+B.w/2,50,B.y+B.h/2);sc.add(bl);
+    const bl=new THREE.PointLight(0xd8e4ff,0.72,110,1.6);bl.position.set(B.x+B.w/2,50,B.y+B.h/2);sc.add(bl);
     const bulb=sphM(1.6,new THREE.MeshBasicMaterial({color:0xeef4ff}));bulb.position.set(B.x+B.w/2,CEIL-3,B.y+B.h/2);sc.add(bulb);
     const shelf=boxM(8,46,B.h-10,new THREE.MeshLambertMaterial({color:0x15171a}));shelf.position.set(B.x+B.w-5,23,B.y+B.h/2);sc.add(shelf);
     const blk=new THREE.MeshPhongMaterial({color:0x0b0b0d,shininess:30,specular:0x1a1a1a}),glow=new THREE.MeshBasicMaterial({color:0x6fc8ff}),scr=new THREE.MeshBasicMaterial({color:0x37e07a});
