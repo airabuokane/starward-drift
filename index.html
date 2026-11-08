@@ -6885,7 +6885,7 @@ function drawTouch(){
   const p=G.player;
   if(G.m.daily){// 日常：必要最低限だけ
     tbtn(12,50,72,30,G.paused?'再開':'一時停止',()=>{G.paused=!G.paused;});
-    if(dailyNear(p))cbtn(W-80,H-262,48,dailyNear(p).k==='mate'?'話す':dailyNear(p).k==='ball'?'拾う':'する',{act:()=>dailyAct(p)});else{const nd=nearDoor(p);if(nd)cbtn(W-80,H-262,48,nd.open?'閉める':'開ける',{act:()=>toggleDoor(p)});}
+    if(dailyNear(p))cbtn(W-80,H-252,48,dailyNear(p).k==='mate'?'話す':dailyNear(p).k==='ball'?'拾う':'する',{act:()=>dailyAct(p)});else{const nd=nearDoor(p);if(nd)cbtn(W-80,H-252,48,nd.open?'閉める':'開ける',{act:()=>toggleDoor(p)});}
     if(TS.move){const s=TS.move,sx=s.ox/US,sy=s.oy/US,kx=s.x/US,ky=s.y/US,l=Math.hypot(kx-sx,ky-sy),m=Math.min(l,55),nx=l?sx+(kx-sx)/l*m:sx,ny=l?sy+(ky-sy)/l*m:sy;ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(sx,sy,55,0,TAU);ctx.stroke();ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.arc(nx,ny,22,0,TAU);ctx.fill();}
     return;}
   {// 指示：右上にひとまとまり（地図が出るときはその上）
@@ -6901,7 +6901,7 @@ function drawTouch(){
     if(G.m.explore){bx2=12;const s2=(l,f,w)=>{tbtn(bx2,152,w||64,30,l,f,false);bx2+=(w||64)+6;};
       s2('タイトル',()=>title(),72);s2(EXPLORE_DAY?'夜にする':'昼にする',()=>{EXPLORE_DAY=!EXPLORE_DAY;startExplore(SAVE.exploreI);},72);s2(G.exBig?'地図を閉じる':'全体地図',()=>{G.exBig=!G.exBig;},88);}}
   // 右手の操作：右下を中心に弧状にまとめる
-  const air=p.jump&&p.jump.land,ax=W-80,ay2=H-262;
+  const air=p.jump&&p.jump.land,ax=W-80,ay2=H-252;
   cbtn(ax,ay2,48,air?'着地！':'回避',{combo:'dj',on:TS.jump||air,sub:air?'':'長押しで跳躍',dis:p.exhausted});
   cbtn(ax-108,ay2+44,42,'ガード',{hold:'guard',on:TS.guard,sub:'押している間'});
   cbtn(ax-120,ay2-66,36,p.lockT?'解除':'ロック',{act:()=>{TS.lockOn=!TS.lockOn;},on:!!p.lockT});
@@ -7214,8 +7214,8 @@ function enterRoom(){
   disposeScenes();
   const senN=()=>SAVE.roster.filter(r=>r.alive&&r.senpai).length;
   if(SAVE.cataPrep){}
-  else if(first&&SAVE.roster.length===1){// 最初のメンバーは1〜4人（先輩を含む）
-    const n=1+Math.floor(Math.random()*4),defs=ROSTER_DEFAULT.slice(1).sort(()=>Math.random()-0.5);let di=0;
+  else if(first&&SAVE.roster.length===1){// 最初のメンバーは2〜3人（先輩がいる回もいない回も）
+    const n=2+Math.floor(Math.random()*2),defs=ROSTER_DEFAULT.slice(1).sort(()=>Math.random()-0.5);let di=0;
     for(let k=0;k<n;k++){if((k===0&&Math.random()<0.8)||(k===1&&Math.random()<0.15))SAVE.roster.push(makeSenpai());else if(di<defs.length){const d=defs[di++];SAVE.roster.push(applyAge(Object.assign({},d,{points:0,alive:true,missions:0,briefed:0,suited:false,weapon:'none',role:null,kills:0,cloth:CLOTH[Math.floor(Math.random()*CLOTH.length)]})));}else SAVE.roster.push(makeNewbie());}}
   else{const cap=Math.max(0,6-SAVE.roster.filter(r=>r.alive&&!r.isPlayer).length),n=Math.min(cap,Math.floor(Math.random()*4));for(let i=0;i<n;i++)SAVE.roster.push(makeNewbie());}
   SAVE.snapshot=JSON.stringify({roster:SAVE.roster,unlock:SAVE.unlock,vet:SAVE.vet,tier:SAVE.tier});
@@ -7252,7 +7252,7 @@ function clipModel(g,mode,k,y0,hgt){
 }
 function canvasTex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;}
 function buildRoom3D(){
-  init3D();
+  init3D();try{wetVM(false);}catch(e){}
   if(R3.room){disposeTree(R3.room.sc);R3.room=null;}
   const sc=new THREE.Scene();sc.background=new THREE.Color(0x000000);
   sc.add(new THREE.AmbientLight(0x8a8a90,0.44));
@@ -7451,11 +7451,12 @@ function manualMenu(i){
 // 最初の日常：始まってすぐ、操作の説明を画面に出す（移動・ダッシュ・視点）
 function drawTut(){if(!G||!G.m||!G.m.daily||!G.daily||!G.daily.fixed||G.daily.outRT||G.paused)return;const el=G.t-(G.daily.t0||0);if(el>5)return;
   const a=Math.min(1,el/0.4,(5-el)/0.6);ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';
-  if(TOUCH){const bw=Math.min(W*0.3,300),bh=Math.min(H*0.34,150),y0=H*0.5;
+  if(TOUCH){const bw=Math.min(W*0.42,300),bh=Math.min(H*0.34,150),y0=H*0.5;
     ctx.strokeStyle='rgba(158,240,255,.25)';ctx.setLineDash([4,8]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,H*0.3);ctx.lineTo(W/2,H*0.95);ctx.stroke();ctx.setLineDash([]);
-    for(const [cx,t1,t2] of [[W*0.04+bw/2,'左側：移動','スライドで歩く・端まで倒すとダッシュ'],[W*0.96-bw/2,'右側：視点','スライドで見回す']]){const x0=cx-bw/2;
+    for(const [cx,t1,t2] of [[W*0.03+bw/2,'左側：移動',['スライドで歩く','端まで倒すとダッシュ']],[W*0.97-bw/2,'右側：視点',['スライドで見回す']]]){const x0=cx-bw/2;
       ctx.fillStyle='rgba(0,0,0,.5)';roundRect(ctx,x0,y0,bw,bh,14);ctx.fill();ctx.strokeStyle='rgba(158,240,255,.6)';ctx.setLineDash([6,6]);ctx.lineWidth=1.5;roundRect(ctx,x0,y0,bw,bh,14);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#e6f6ff';ctx.font='bold 18px sans-serif';ctx.fillText(t1,cx,y0+bh/2+4);ctx.fillStyle='rgba(200,230,240,.85)';ctx.font='12px sans-serif';ctx.fillText(t2,cx,y0+bh/2+26);
+      const fit=(t,px,b)=>{let f=px;ctx.font=(b?'bold ':'')+f+'px sans-serif';while(f>9&&ctx.measureText(t).width>bw-16){f--;ctx.font=(b?'bold ':'')+f+'px sans-serif';}};
+      ctx.fillStyle='#e6f6ff';fit(t1,18,true);ctx.fillText(t1,cx,y0+bh/2+4);ctx.fillStyle='rgba(200,230,240,.85)';t2.forEach((l,i)=>{fit(l,12,false);ctx.fillText(l,cx,y0+bh/2+24+i*16);});
       const k=(G.t*0.8)%1;ctx.strokeStyle='rgba(158,240,255,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx+(k-0.5)*50,y0+bh/2-26,10,0,TAU);ctx.stroke();}}
   else{ctx.fillStyle='rgba(0,0,0,.45)';roundRect(ctx,W/2-210,H*0.62,420,64,10);ctx.fill();ctx.fillStyle='#e6f6ff';ctx.font='bold 16px sans-serif';ctx.fillText('WASD：移動　　Shift：ダッシュ',W/2,H*0.62+26);ctx.fillStyle='rgba(200,230,240,.85)';ctx.font='14px sans-serif';ctx.fillText('マウス：視点を動かす',W/2,H*0.62+50);}
   ctx.restore();}
@@ -7487,7 +7488,7 @@ function roomUpdate(dt){
   if(G.mode==='room'&&RM.phase==='prep'){
     RM.time-=dt;
     if(!RM.open){RM.greetT+=dt;if(RM.greetT>6&&RM.greetI<GREET.length-1){RM.greetI++;RM.greetT=0;RM.ballLines=GREET[RM.greetI];}}
-    if(!RM.open&&RM.time<=RM.T*0.55){RM.open=true;RM.songT=8.5;RM.rackWant=true;playJingle();for(const m of RM.mem)if(Math.random()<0.6)rsay(m,'song');G.log.unshift({s:'黒い球から曲が流れ始めた',c:'#9ef0a8',t:G.t});}
+    if(!RM.open&&RM.time<=RM.T*0.55){RM.open=true;RM.songT=0;RM.rackWant=true;playJingle();for(const m of RM.mem)if(Math.random()<0.6)rsay(m,'song');G.log.unshift({s:'黒い球から曲が流れ始めた',c:'#9ef0a8',t:G.t});}
     if(RM.open&&!RM.revealed){RM.songT-=dt;if(RM.songT<=0){RM.revealed=true;const m=G.m;RM.ballLines=['てめえ達は今からこの方を','ヤッつけに行って下ちい','',...(m.card||[m.title,...m.brief]),'','じかん　'+Math.floor(m.time/60)+'分'+(m.time%60?m.time%60+'秒':'')];
       for(const mm of RM.mem)if(Math.random()<0.5)rsay(mm,Math.random()<0.5?'open':'ballRead');sfx('lock',0.5);}}
     if(RM.cata)RM.time=RM.T;
@@ -7508,7 +7509,7 @@ function roomUpdate(dt){
     for(const m of RM.mem)if(!m.gone&&(RM.inT||0)>m.inDelay+1.2)cands.push({kind:'mem',m,label:'話しかける',x:m.x,h:19*(m.ref.age<12?0.72:1),z:m.y,r:9});
     for(const L of ROOM_LOOK)if(!L.back)cands.push(L.label==='入口のドア'?{kind:'exit',label:'入口のドアを開ける（帰る）',x:L.x,h:L.h,z:L.z,r:L.r+4,pri:0.5}:{kind:'look',L,label:L.label+'を調べる',x:L.x,h:L.h,z:L.z,r:L.r,pri:-0.5});
     let bt=1e9;for(const c of cands){const vx=c.x-O.x,vy=c.h-O.y,vz=c.z-O.z,tt=vx*D.x+vy*D.y+vz*D.z;if(tt<=0||tt>75)continue;const px=O.x+D.x*tt-c.x,py=O.y+D.y*tt-c.h,pz=O.z+D.z*tt-c.z;const sc2=tt+(c.pri>0?-6:c.pri<0?8:0);if(Math.hypot(px,py,pz)<c.r&&sc2<bt){bt=sc2;RM.focus=c;}}}
-  if(G.mode==='room'&&!RM.menu&&!RM.pGone&&RM.phase==='prep'){const cp=Math.cos(p.pitch),D={x:Math.cos(p.yaw)*cp,y:Math.sin(p.pitch),z:Math.sin(p.yaw)*cp},O={x:p.x,y:EYE,z:p.y};
+  if(G.mode==='room'&&!RM.menu&&!RM.pGone&&roomCanAct(RM)){const cp=Math.cos(p.pitch),D={x:Math.cos(p.yaw)*cp,y:Math.sin(p.pitch),z:Math.sin(p.yaw)*cp},O={x:p.x,y:EYE,z:p.y};
     const inB=p.x>ROOM.w,cands=[];
     if(!inB)cands.push({kind:'ball',label:'黒い球',x:ROOM.ball.x,h:12,z:ROOM.ball.y,r:16});
     if(RM.cata&&!inB){const L=ROOM_LOOK.find(L=>L.label==='入口のドア');if(L)cands.push({kind:'exit',label:'入口のドアを開ける（外へ）',x:L.x,h:L.h,z:L.z,r:L.r+4,pri:0.6});}
@@ -7566,7 +7567,7 @@ function roomUpdate(dt){
   if(G.mode==='room'&&RM.phase==='out'){RM.qT-=dt;
     for(const m of RM.mem)if(m.outT>0){m.outT-=dt;if(m.outT<=0)m.gone=true;}
     if(RM.pOutT>0){RM.pOutT-=dt;if(RM.pOutT<=0)RM.pGone=true;}
-    if(RM.qT<=0&&RM.q.length){const o=RM.q.shift();RM.qT=1.5;sfx('warp',0.5);if(o==='player')RM.pOutT=1.3;else{o.outT=1.3;o.changeT=0;}}
+    if(RM.qT<=0&&RM.q.length){const o=RM.q.shift();RM.qT=1.5;sfx('warp',0.5);if(o==='player'){RM.pOutT=1.3;closeRoomMenu();RM.focus=null;}else{o.outT=1.3;o.changeT=0;}}
     if(!RM.q.length&&RM.qT<-1.2&&RM.mem.every(m=>m.gone||m.outT<=0)&&RM.pGone){for(const m of RM.mem){if(!m.ref.role)m.ref.role=null;}startMission(G.mi);}
   }
   if(G.mode==='resultRoom'){RM.inT=(RM.inT||0)+dt;}
@@ -7577,8 +7578,10 @@ function roomUpdate(dt){
   RM.rackOpen+=((RM.rackWant?1:0)-RM.rackOpen)*Math.min(1,dt*2);
   RM.doorOpen+=((RM.doorWant?1:0)-RM.doorOpen)*Math.min(1,dt*3);
 }
+// 転送が始まっても、自分の番が来るまでは装備や着替えができる
+function roomCanAct(RM){return RM.phase==='prep'||(RM.phase==='out'&&!RM.pOutT&&!RM.pGone);}
 function roomStartTransfer(){
-  const RM=G.room;if(RM.phase!=='prep')return;RM.phase='out';closeRoomMenu();
+  const RM=G.room;if(RM.phase!=='prep')return;RM.phase='out';
   for(const m of RM.mem){if(m.changeT>0)m.changeT=0;m.trip=null;}
   RM.q=['player',...RM.mem].sort(()=>Math.random()-0.5);RM.qT=1.2;
 }
@@ -7657,7 +7660,7 @@ function roomInteract(t){
   if(RM.cata&&t.kind==='exit'){if(RM.leaving)return;RM.leaving=true;cataSaveGear();sfx('step',0.4);cataWeekLater(startCata1);return;}
   if(G.mode==='resultRoom'&&RM.free){if(t.kind==='ball'){RM.menu=true;try{document.exitPointerLock();}catch(e){}showResult(RM.reason);return;}if(t.kind==='mem'){resultTalk(t.m);return;}if(t.kind==='look'){rlog(t.L.t,'#c9d1d9');return;}
     if(t.kind==='exit'&&!RM.leaving){if((RM.inT||0)<RM.allInT){rlog('まだ全員戻ってきていない……','#ff9f43');return;}resultApply(RM.reason);RM.leaving=true;if(G.m&&G.m.last){showOv('<div style="text-align:center;font-size:17px">まだやるべきことがあるようだ</div>');setTimeout(()=>{hideOv();enterCataPrep();},2200);return;}sfx('step',0.4);showOv('<div style="text-align:center;font-size:17px">ドアノブが、今度はあっさり回った。<br><br>扉の向こうは——見慣れた、いつもの街だった。</div>');setTimeout(()=>{const nx=RM.next,nd=1+Math.floor(Math.random()*7);SAVE.day=(SAVE.day||0)+nd;blackCard(nd+'日後',()=>{hideOv();nx&&nx();});},2200);}return;}
-  if(RM.phase!=='prep')return;
+  if(!roomCanAct(RM))return;
   if(t.kind==='look'){if(t.L.manual){manualMenu();return;}rlog(t.L.t,'#c9d1d9');sfx('step',0.15);return;}
   if(t.kind==='door'){if(!RM.open)return;RM.doorWant=!RM.doorWant;sfx('step',0.3);return;}
   if(t.kind==='item'){if(t.it.taken&&t.it.by==='p'){dropItem(t.it.k);rlog(t.it.label+'を戻した','#8b949e');}else takeItem(t.it);return;}
@@ -7728,7 +7731,7 @@ function overlayRoom(){
   ctx.save();ctx.scale(US,US);const LH=H/US;ctx.textAlign='left';ctx.font='13px sans-serif';G.log.slice(0,5).forEach((l,i)=>{const a=clamp(1-(G.t-l.t-5)/3,0,1);if(a<=0)return;ctx.globalAlpha=a;const y=LH-80-i*20,w=ctx.measureText(l.s).width;ctx.fillStyle='rgba(8,12,18,.6)';roundRect(ctx,12,y-15,w+14,20,5);ctx.fill();ctx.fillStyle=l.c;ctx.fillRect(12,y-12,2,14);ctx.fillText(l.s,18,y);});ctx.globalAlpha=1;ctx.restore();
   if(RM.pOutT>0||RM.pGone){const k=RM.pGone?1:1-RM.pOutT/1.3,ly=H*k;ctx.fillStyle='#000';ctx.fillRect(0,0,W,ly);ctx.fillStyle='rgba(140,230,255,.9)';ctx.fillRect(0,ly-2,W,3);}
   if(TOUCH&&!RM.menu&&!RM.pGone&&(G.mode==='room'||RM.free)){TB=[];const sw=W,sh=H;ctx.save();ctx.scale(US,US);W=sw/US;H=sh/US;
-    try{if(RM.focus)cbtn(W-80,H-262,48,RM.focus.kind==='mem'?'話す':RM.focus.kind==='item'||RM.focus.kind==='gun'||RM.focus.kind==='case'?(/戻す$/.test(RM.focus.label||'')?'戻す':'取る'):RM.focus.kind==='door'?'押す':RM.focus.kind==='exit'?'開ける':RM.focus.kind==='look'?'調べる':'調べる',{act:()=>{TS.useTap=true;}});
+    try{if(RM.focus)cbtn(W-80,H-252,48,RM.focus.kind==='mem'?'話す':RM.focus.kind==='item'||RM.focus.kind==='gun'||RM.focus.kind==='case'?(/戻す$/.test(RM.focus.label||'')?'戻す':'取る'):RM.focus.kind==='door'?'押す':RM.focus.kind==='exit'?'開ける':RM.focus.kind==='look'?'調べる':'調べる',{act:()=>{TS.useTap=true;}});
 
       {// 部屋でも戦闘中と同じ武器ボタンで持ち替える
       const L=(SAVE.pHard?[]:(SAVE.loadout||[]));if(L.length&&!RM.menu){const ws=L.concat(['none']),hw=roomHeld(),bw=126,bh=52,tot=ws.length*(bw+8)-8;
@@ -7791,15 +7794,18 @@ function enterResultRoom(reason){
 function newGame(trial){
   initAudio();
   SAVE.roster=[Object.assign({},ROSTER_DEFAULT[0],{points:0,alive:true,missions:0,life:0})];
-  const normal=MISSIONS.map((m,i)=>i).filter(i=>!MISSIONS[i].last).sort(()=>Math.random()-0.5);
+  // 最初の3回は強めの星人（ぬらりひょん・はんぎょじん・あばれんぼう・オニ・宮本・黒服）が出にくい（確率1/4）
+  const HARD=['nurari','hangyo','buddha','oni','musashi','kurofuku'];
+  const pool0=MISSIONS.map((m,i)=>i).filter(i=>!MISSIONS[i].last).sort(()=>Math.random()-0.5),normal=[];
+  while(pool0.length){const early=normal.length<3,ws=pool0.map(i=>early&&HARD.includes(MISSIONS[i].key)?0.25:1);let r=Math.random()*ws.reduce((a,b)=>a+b,0),k=0;while(k<ws.length-1&&(r-=ws[k])>0)k++;normal.push(pool0.splice(k,1)[0]);}
   SAVE.order=normal.concat(MISSIONS.map((m,i)=>i).filter(i=>MISSIONS[i].last));SAVE.step=0;SAVE.mi=SAVE.order[0];
   SAVE.trial=!!trial;SAVE.day=0;SAVE.doorHint=0;SAVE.tier=trial?3:0;SAVE.unlock={z:SAVE.tier>=1,xPow:1};
   SAVE.loadout=[];SAVE.pSuited=false;SAVE.pCase=false;SAVE.pHard=false;SAVE.vet=0;SAVE.plan=null;G=null;if(trial){trialMenu();return;}startDaily(enterRoom,true);
 }
-// 体験版：黒い球の画面から好きなミッションを選ぶ
+// ミッション一覧：黒い球の画面から好きなミッションを選ぶ（武器フルセット）
 function trialMenu(){G=null;disposeScenes();const L=MISSIONS.map((m,i)=>[m,i]).filter(([m])=>!m.daily&&!m.explore);
   const GR=[['residential','市街地'],['temple','神社'],['downtown','繁華街'],['school','学校']],btn=([m,i])=>'<button data-i="'+i+'">'+esc(m.title)+'</button>';
-  showOv('<h2>体験版</h2><div class="lcd" style="font-size:15px;margin-top:0">どのせいじんを　やっつけまつか</div><div id="tmenu">'+
+  showOv('<h2>ミッション一覧</h2><div class="lcd" style="font-size:15px;margin-top:0">どのせいじんを　やっつけまつか</div><div id="tmenu">'+
     GR.map(([th,nm])=>'<div class="msec">'+nm+'</div><div class="mgrid">'+L.filter(([m])=>!m.last&&m.theme===th).map(btn).join('')+'</div>').join('')+
     '<div class="msec">特別</div><div class="mgrid">'+L.filter(([m])=>m.last).map(btn).join('')+'<button data-i="cata">カタストロフィー</button></div><div class="navrow"><button data-i="back">戻る</button></div></div>');
   document.querySelectorAll('#tmenu button').forEach(b=>b.onclick=()=>{initAudio();const v=b.dataset.i;if(v==='back'){optionMenu();return;}if(v==='cata'){SAVE.mi=MISSIONS.findIndex(m=>m.last);SAVE.order=[SAVE.mi];SAVE.step=0;enterCataPrep();return;}const i=+v;SAVE.order=[i];SAVE.step=0;SAVE.mi=i;enterRoom();});}
@@ -7831,7 +7837,7 @@ function title(){
   document.getElementById('bOpt').onclick=optionMenu;
 }
 function optionMenu(){
-  showOv(`<h2>オプション</h2><div class="msec">遊ぶ</div><div class="mgrid"><button id="b2">体験版（武器フルセット）</button></div>
+  showOv(`<h2>オプション</h2><div class="msec">遊ぶ</div><div class="mgrid"><button id="b2">ミッション一覧</button></div>
     <div class="msec">確認</div><div class="mgrid"><button id="b3">キャラ確認</button><button id="b4">マップ探索（テスト）</button></div><div class="navrow"><button id="b0">戻る</button></div>`);
   document.getElementById('b2').onclick=()=>newGame(true);
   document.getElementById('b3').onclick=()=>{initAudio();openGallery();};
