@@ -2196,7 +2196,9 @@ function perceive(e){
   }
   if(best){e.target=best;e.lastSeenT=G.t;return;}
   const hm=has(e,'hearing')?1.8:1;
-  for(const n of G.noises){
+  // 校舎の中の星人は音では寄ってこない（徘徊して、見つけたら襲う）
+  const deaf=G.city&&G.city.theme==='school'&&hollowAt(e.x,e.y);
+  if(!deaf)for(const n of G.noises){
     if(G.t-n.t>0.25||!n.src.alive||n.src.kind!=='human'||(n.src.isPlayer&&G.cataBag&&!G.cataBag.used))continue;
     if(Math.hypot(n.x-e.x,n.y-e.y)<n.r*hm){
       if(e.target!==n.src&&hm>1&&e.revealed&&Math.hypot(n.x-e.x,n.y-e.y)>n.r)reveal(e,'hearing');
@@ -8019,7 +8021,7 @@ function showResult(reason){
     return;
   }
   resultApply(reason);
-  const lines=reason==='timeout'?['じかんぎれでつ','みんな　-10てん','','でわ　てんすうを　くばりまつ','']:['でわ　てんすうを　くばりまつ',''];
+  const lines=reason==='timeout'?['じかんぎれでつ','みんな　-10てん','','それぢは　ちいてんをはぢぬる','']:['それぢは　ちいてんをはぢぬる',''];
   const surv=SAVE.roster.filter(r=>r.alive);
   for(const r of surv){
     const g=Math.max(0,r.points-(r.ptsBefore||0));
@@ -8047,7 +8049,7 @@ function showResult(reason){
     const show100=()=>{
       if(p.points<100){menu.innerHTML='<button id="n1">部屋を歩く</button>';document.getElementById('n1').onclick=()=>freeResultRoom(next);return;}
       const dead=deadList();
-      menu.innerHTML='<div class="lcd">100てんめにゅ〜\n\n1　きおくをけされて　かいほうされる\n2　つよいぶきを　もらう（'+tierName()+'）\n3　しんだやつを　いきかえらせる</div><button id="m1">1</button>'+((SAVE.tier||0)<3?'<button id="m2">2</button>':'')+(dead.length?'<button id="m3">3</button>':'')+'<button id="m0">えらばない</button>';
+      menu.innerHTML='<div class="lcd">100点めにゅ～\n\n1.「記憶を消されて解放される」\n2.「より強力な武器を与えられる」\n3.「MEMORYの中から人間を再生できる」</div><button id="m1">1</button>'+((SAVE.tier||0)<3?'<button id="m2">2</button>':'')+(dead.length?'<button id="m3">3</button>':'')+'<button id="m0">えらばない</button>';
       document.getElementById('m1').onclick=()=>{p.points-=100;ending(true);};
       if((SAVE.tier||0)<3)document.getElementById('m2').onclick=()=>{p.points-=100;const nm=tierName();SAVE.tier=(SAVE.tier||0)+1;SAVE.unlock.z=SAVE.tier>=1;el.textContent+='\n\nあなたわ　'+nm+'を　もらいまちた';el.scrollTop=el.scrollHeight;sfx('lock',0.6);show100();};
       if(dead.length)document.getElementById('m3').onclick=()=>{menu.innerHTML='<div class="lcd">だれを　いきかえらせまつか</div>'+dead.map((r,i)=>'<button data-i="'+i+'">'+esc(r.name)+'　'+(r.life||0)+'てん</button>').join('')+'<button id="mb">もどる</button>';
